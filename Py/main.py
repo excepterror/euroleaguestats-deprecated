@@ -258,7 +258,7 @@ class DraggableLogo(DragBehavior, Widget):
 
         # To set pos subtract from Window.width (or Window.height) factor2 * width (or height) / 2
         self.im = Image(source='rim.png', pos=(Window.width / 2 - factor2, Window.height / 2 - factor2),
-                        size_hint=[None, None], allow_stretch=True, keep_ratio=False,
+                        size_hint=[None, None],
                         width=factor2 * 2, height=factor2 * 2, opacity=0)
         self.add_widget(self.im)
 
@@ -322,9 +322,6 @@ class DraggableLogo(DragBehavior, Widget):
 
         self.logo.opacity = 1
         self.im.opacity = 0
-
-        x = Window.system_size[0]
-        y = Window.system_size[1]
 
         pos_init_dict = {'Anadolu Efes Istanbul.png': [offset, y - a],
                          'AX Armani Exchange Olimpia Milan.png': [factor1 + 2 * offset, y - a],
@@ -552,7 +549,7 @@ class LandingScreen(Screen, FloatLayout):
                        width=lambda *x: btn2_.setter("text_size")(btn2_, (btn2_.width, None)),
                        texture_size=lambda *x: btn2_.setter("height")(btn2_, btn2_.texture_size[1]))
 
-            version = Label(text='v1.2.0', font_size='10', color=(0, .6, .8, 1), size_hint=[.25, .05],
+            version = Label(text='v1.2.2', font_size='10', color=(0, .6, .8, 1), size_hint=[.25, .05],
                             pos_hint={'x': .75, 'y': 0}, halign='right', valign='middle')
             version.bind(width=lambda *x: version.setter("text_size")(version, (version.width, None)),
                          texture_size=lambda *x: version.setter("height")(version, version.texture_size[1]))
