@@ -6,7 +6,7 @@ from urlparse import urljoin
 
 
 def urls_teams():
-    # PURPOSE: Returns the names of the teams and the dictionary. Called in by 'Class' DraggableLogo - main.py.
+    # PURPOSE: Returns the names of the teams and the dictionary. Called in 'Class' DraggableLogo - main.py.
     teams_codes = {'Anadolu Efes Istanbul': [1], 'AX Armani Exchange Olimpia Milan': [2],
                    'Buducnost VOLI Podgorica': [3], 'CSKA Moscow': [4], 'Darussafaka Tefken Istanbul': [5],
                    'FC Barcelona Lassa': [6], 'FC Bayern Munich': [7], 'Fenerbahce Istanbul': [8],
@@ -60,13 +60,13 @@ def check_opponents(t):
     # PURPOSE: Creates 3 dicts with all teams the player played against in Regular Season, Play-Offs & Finals.
     # Called by :meth: 'access_per_game_stats' - library5.py.
     rivals_rs = t.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_RS']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_RS']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
     rivals_po = t.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_PO']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_PO']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
     rivals_ff = t.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_FF']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_FF']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
     return [rivals_rs, rivals_po, rivals_ff]
 

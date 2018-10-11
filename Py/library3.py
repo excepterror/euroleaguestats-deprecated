@@ -33,13 +33,13 @@ def get_opponents(tree, rivals_rs, rivals_po, rivals_ff):
     opponents_dict_rs = {}
     opponents_dict_po = {}
     opponents_dict_ff = {}
-    round_num_rs = tree.xpath("//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_RS']//"
+    round_num_rs = tree.xpath("//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_RS']//"
                               "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='PlayerGameNumberContainer']"
                               "/text()")
-    round_num_po = tree.xpath("//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_PO']//"
+    round_num_po = tree.xpath("//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_PO']//"
                               "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='PlayerGameNumberContainer']"
                               "/text()")
-    round_num_ff = tree.xpath("//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_FF']//"
+    round_num_ff = tree.xpath("//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_FF']//"
                               "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='PlayerGameNumberContainer']"
                               "/text()")
     round_num_rs_n = []
@@ -74,21 +74,21 @@ def per_game_stats(tree):
     # PURPOSE: Fetching game stats.
     # Stats for each round played in RS.
     games_stats_rs = tree.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_RS']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_RS']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td/text()")
     games_played_rs = len(games_stats_rs) / 17
     for i in range(games_played_rs):
         del games_stats_rs[16 * i]
     # Stats for each round played in POs.
     games_stats_po = tree.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_PO']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_PO']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td/text()")
     games_played_po = len(games_stats_po) / 17
     for i in range(games_played_po):
         del games_stats_po[16 * i]
     # Stats for each round played in FF.
     games_stats_ff = tree.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2017_FF']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_FF']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td/text()")
     games_played_ff = len(games_stats_ff) / 17
     for i in range(games_played_ff):
