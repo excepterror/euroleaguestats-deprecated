@@ -48,11 +48,11 @@ class GameStats(Screen, FloatLayout):
         self.add_widget(Image(source='court.jpg', allow_stretch=True, keep_ratio=False))
 
         with self.canvas:
-            Color(0, 0, 0, 1)
-            self.vertical_l = Line(width=3, points=[0, 0, 0, y])
-            self.vertical_r = Line(width=3, points=[x, 0, x, y])
-            self.horizontal_top = Line(width=3, points=[0, y, x, y])
-            self.horizontal_bottom = Line(width=3, points=[0, 0, x, 0])
+            Color(0, .2, .4, 1)
+            self.vertical_l = Line(width=6, points=[0, 0, 0, y])
+            self.vertical_r = Line(width=6, points=[x, 0, x, y])
+            self.horizontal_top = Line(width=6, points=[0, y, x, y])
+            self.horizontal_bottom = Line(width=6, points=[0, 0, x, 0])
 
         label = AnotherLabel(text='Games played by ' + self.player_name, font_size='14sp')
         recycle_viewer = RVMod()
@@ -549,7 +549,7 @@ class LandingScreen(Screen, FloatLayout):
                        width=lambda *x: btn2_.setter("text_size")(btn2_, (btn2_.width, None)),
                        texture_size=lambda *x: btn2_.setter("height")(btn2_, btn2_.texture_size[1]))
 
-            version = Label(text='v1.2.2', font_size='10', color=(0, .6, .8, 1), size_hint=[.25, .05],
+            version = Label(text='v1.2.3', font_size='10', color=(0, .6, .8, 1), size_hint=[.25, .05],
                             pos_hint={'x': .75, 'y': 0}, halign='right', valign='middle')
             version.bind(width=lambda *x: version.setter("text_size")(version, (version.width, None)),
                          texture_size=lambda *x: version.setter("height")(version, version.texture_size[1]))
