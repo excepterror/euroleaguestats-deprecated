@@ -86,7 +86,7 @@ class ExitPopup(Popup):
     @staticmethod
     def exit_app(*args):
         App.get_running_app().stop()
-        # Window.close()
+        Window.close()
 
     def cancel_exit(self, *args):
         self.dismiss()
