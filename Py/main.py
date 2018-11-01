@@ -1,5 +1,6 @@
 import requests
 import os
+import ConfigParser
 import kivy
 
 from collections import OrderedDict
@@ -15,7 +16,7 @@ from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import ScreenManager, Screen, FallOutTransition
 from kivy.core.window import Window
-from kivy.properties import BooleanProperty
+from kivy.properties import BooleanProperty, StringProperty
 from kivy.uix.behaviors import DragBehavior
 from kivy.uix.widget import Widget
 from kivy.animation import Animation
@@ -28,10 +29,10 @@ from library3 import dict_creator, get_aver_stats, get_total_stats
 from library4 import RV
 from library5 import RVMod
 from library6 import MyLabel, ExitPopup, ToolTipTextUp, ToolTipTextDown, MyOtherLabel
-from library7 import AnotherSpecialButton, PlayerButton  # ASpecialButton,
+from library7 import AnotherSpecialButton, PlayerButton  # ASpecialButton
 from library8 import get_standings, AnotherLabel
 from library9 import RVSt
-from library10 import is_connected
+from library10 import is_connected, GotItButton
 
 kivy.require('1.10.1')
 
@@ -45,16 +46,16 @@ class GameStats(Screen, FloatLayout):
     def __init__(self, **kwargs):
         super(GameStats, self).__init__(**kwargs)
 
-        self.add_widget(Image(source='court.jpg', allow_stretch=True, keep_ratio=False))
+        self.add_widget(Image(source='Court.jpg', allow_stretch=True, keep_ratio=False))
 
         with self.canvas:
             Color(0, .2, .4, 1)
-            self.vertical_l = Line(width=6, points=[0, 0, 0, y])
-            self.vertical_r = Line(width=6, points=[x, 0, x, y])
-            self.horizontal_top = Line(width=6, points=[0, y, x, y])
-            self.horizontal_bottom = Line(width=6, points=[0, 0, x, 0])
+            self.vertical_l = Line(width=factor4, points=[0, 0, 0, y])
+            self.vertical_r = Line(width=factor4, points=[x, 0, x, y])
+            self.horizontal_top = Line(width=factor4, points=[0, y, x, y])
+            self.horizontal_bottom = Line(width=factor4, points=[0, 0, x, 0])
 
-        label = AnotherLabel(text='Games played by ' + self.player_name, font_size='14sp')
+        label = AnotherLabel(text='Games played by ' + self.player_name, font_size='17sp')
         recycle_viewer = RVMod()
 
         self.add_widget(label)
@@ -76,14 +77,14 @@ class Options(Screen, FloatLayout):
     def __init__(self, **kwargs):
         super(Options, self).__init__(**kwargs)
 
-        self.add_widget(Image(source='court.jpg', allow_stretch=True, keep_ratio=False))
+        self.add_widget(Image(source='Court.jpg', allow_stretch=True, keep_ratio=False))
 
         with self.canvas:
             Color(0, .6, .6, 1)
-            self.vertical_l = Line(width=6, points=[0, 0, 0, y])
-            self.vertical_r = Line(width=6, points=[x, 0, x, y])
-            self.horizontal_top = Line(width=6, points=[0, y, x, y])
-            self.horizontal_bottom = Line(width=6, points=[0, 0, x, 0])
+            self.vertical_l = Line(width=factor4, points=[0, 0, 0, y])
+            self.vertical_r = Line(width=factor4, points=[x, 0, x, y])
+            self.horizontal_top = Line(width=factor4, points=[0, y, x, y])
+            self.horizontal_bottom = Line(width=factor4, points=[0, 0, x, 0])
 
         # D/L player's photo.
         if self.photo != 'NoImage.jpg':
@@ -99,15 +100,15 @@ class Options(Screen, FloatLayout):
                    width='210dp',
                    pos_hint={'center_x': .5, 'y': .67})
 
-        name = MyOtherLabel(text=self.player_name, font_size='16sp')
+        name = MyOtherLabel(text=self.player_name, font_size='17sp')
 
-        num_pos = Label(text=str(self.num) + " | " + str(self.position), color=[0, 0, 0, 1], font_size='16sp',
+        num_pos = Label(text=str(self.num) + " | " + str(self.position), color=[0, 0, 0, 1], font_size='17sp',
                         size_hint=[1, None], halign="center", valign="middle")
         num_pos.bind(width=lambda *x: num_pos.setter("text_size")(num_pos, (num_pos.width, None)),
                      texture_size=lambda *x: num_pos.setter("height")(num_pos, num_pos.texture_size[1]))
 
         bio = Label(text=str(self.height_) + " | " + str(self.date) + " | " + str(self.nationality), color=[0, 0, 0, 1],
-                    font_size='16sp', size_hint=[1, None], halign="center", valign="center")
+                    font_size='17sp', size_hint=[1, None], halign="center", valign="center")
         bio.bind(width=lambda *x: bio.setter("text_size")(bio, (bio.width, None)),
                  texture_size=lambda *x: bio.setter("height")(bio, bio.texture_size[1]))
 
@@ -196,28 +197,29 @@ class Roster(Screen, FocusBehavior, FloatLayout):
 
         self.size_hint = [1, 1]
         self.pos_hint = {'x': 0, 'y': 0}
-        self.add_widget(Image(source='court.jpg', allow_stretch=True, keep_ratio=False))
+        self.add_widget(Image(source='Court.jpg', allow_stretch=True, keep_ratio=False))
 
-        title = MyOtherLabel(text=self.text + ' Roster', font_size='15sp')
+        title = MyOtherLabel(text=self.text + ' Roster', font_size='17sp')
         self.add_widget(title)
 
         with self.canvas:
             Color(0, .6, .6, 1)
-            self.vertical_l = Line(width=6, points=[0, 0, 0, y])
-            self.vertical_r = Line(width=6, points=[x, 0, x, y])
-            self.horizontal_top = Line(width=6, points=[0, y, x, y])
-            self.horizontal_bottom = Line(width=6, points=[0, 0, x, 0])
+            self.vertical_l = Line(width=factor4, points=[0, 0, 0, y])
+            self.vertical_r = Line(width=factor4, points=[x, 0, x, y])
+            self.horizontal_top = Line(width=factor4, points=[0, y, x, y])
+            self.horizontal_bottom = Line(width=factor4, points=[0, 0, x, 0])
 
         # Layouts.
         scrollable_roster = ScrollView(do_scroll_x=False, bar_color=[.2, .6, .8, 1],
-                                       bar_pos_y="left", bar_width=3, bar_margin=2, scroll_type=["bars", "content"],
+                                       bar_pos_y="left", bar_width=factor5, bar_margin=factor6,
+                                       scroll_type=["bars", "content"],
                                        size_hint=[.95, .84],
                                        pos_hint={'center_x': .5, 'y': .03})
 
         grid = GridLayout(rows=len(self.roster_n), cols=1,
                           padding=10,
                           size_hint=[1, 1.8],
-                          spacing=5)
+                          spacing=6)
 
         scrollable_roster.add_widget(grid)
         self.add_widget(scrollable_roster)
@@ -256,10 +258,12 @@ class DraggableLogo(DragBehavior, Widget):
                           width=factor1, height=factor1, pos=self.pos)
         self.add_widget(self.logo)
 
-        # To set pos subtract from Window.width (or Window.height) factor2 * width (or height) / 2
-        self.im = Image(source='rim.png', pos=(Window.width / 2 - factor2, Window.height / 2 - factor2),
+        # To set pos subtract from Window.width (and Window.height) offset_im.
+        # Convert width/2 (or height/2) from px to inches.
+        offset_im = kivy.metrics.dp(75)
+        self.im = Image(source='rim.png', pos=(Window.width / 2 - offset_im, Window.height / 2 - offset_im),
                         size_hint=[None, None],
-                        width=factor2 * 2, height=factor2 * 2, opacity=0)
+                        width='150dp', height='150dp', opacity=0)
         self.add_widget(self.im)
 
         self.bind(pos=self.update_rect)
@@ -327,7 +331,7 @@ class DraggableLogo(DragBehavior, Widget):
                          'AX Armani Exchange Olimpia Milan.png': [factor1 + 2 * offset, y - a],
                          'Buducnost VOLI Podgorica.png': [x - 2 * factor1 - 2 * offset, y - a],
                          'CSKA Moscow.png': [x - offset - factor1, y - a],
-                         'Darussafaka Tefken Istanbul.png': [offset, y - 2.5 * a],
+                         'Darussafaka Tekfen Istanbul.png': [offset, y - 2.5 * a],
                          'FC Barcelona Lassa.png': [factor1 + 2 * offset, y - 2.5 * a],
                          'FC Bayern Munich.png': [x - 2 * factor1 - 2 * offset, y - 2.5 * a],
                          'Fenerbahce Istanbul.png': [x - offset - factor1, y - 2.5 * a],
@@ -376,20 +380,20 @@ class Teams(Screen, FloatLayout):
     def __init__(self, **kwargs):
         super(Teams, self).__init__(**kwargs)
 
-        ph = Image(source='court.jpg', allow_stretch=True, keep_ratio=False)
+        ph = Image(source='Court.jpg', allow_stretch=True, keep_ratio=False)
         self.add_widget(ph)
 
         with self.canvas:
-            Color(1, .2, 0, .9)  # 1, .4, 0, 1
-            self.centered_circle = Line(width=3).circle = (
+            Color(0, 0, 0, 1)  # 1, .2, 0, .9
+            self.centered_circle = Line(width=factor4 - 5).circle = (
                 x / 2., y / 2., factor3, 0, 360, 60)
 
-            self.centered_line_l = Line(width=3, points=[0, y / 2, x / 2 - factor3, y / 2])
-            self.centered_line_r = Line(width=3, points=[x, y / 2, x / 2 + factor3, y / 2])
-            self.vertical_l = Line(width=6, points=[0, 0, 0, y])
-            self.vertical_r = Line(width=6, points=[x, 0, x, y])
-            self.horizontal_top = Line(width=6, points=[0, y, x, y])
-            self.horizontal_bottom = Line(width=6, points=[0, 0, x, 0])
+            self.centered_line_l = Line(width=factor4 - 5, points=[0, y / 2, x / 2 - factor3, y / 2])
+            self.centered_line_r = Line(width=factor4 - 5, points=[x, y / 2, x / 2 + factor3, y / 2])
+            self.vertical_l = Line(width=factor4, points=[0, 0, 0, y])
+            self.vertical_r = Line(width=factor4, points=[x, 0, x, y])
+            self.horizontal_top = Line(width=factor4, points=[0, y, x, y])
+            self.horizontal_bottom = Line(width=factor4, points=[0, 0, x, 0])
 
             # self.test_line = Line(width=1, points=[0, y / 2 - 112.5, x, y / 2 - 112.5])
 
@@ -405,7 +409,7 @@ class Teams(Screen, FloatLayout):
         DraggableLogo.emblem = 'CSKA Moscow.png'
         self.add_widget(DraggableLogo(pos=[x - offset - factor1, y - a]))
 
-        DraggableLogo.emblem = 'Darussafaka Tefken Istanbul.png'
+        DraggableLogo.emblem = 'Darussafaka Tekfen Istanbul.png'
         self.add_widget(DraggableLogo(pos=[offset, y - 2.5 * a]))
 
         DraggableLogo.emblem = 'FC Barcelona Lassa.png'
@@ -464,12 +468,12 @@ class Standings(Screen, FloatLayout):
 
         with self.canvas:
             Color(1, .2, 0, .9)
-            self.vertical_l = Line(width=6, points=[0, 0, 0, y])
-            self.vertical_r = Line(width=6, points=[x, 0, x, y])
-            self.horizontal_top = Line(width=6, points=[0, y, x, y])
-            self.horizontal_bottom = Line(width=6, points=[0, 0, x, 0])
+            self.vertical_l = Line(width=factor4, points=[0, 0, 0, y])
+            self.vertical_r = Line(width=factor4, points=[x, 0, x, y])
+            self.horizontal_top = Line(width=factor4, points=[0, y, x, y])
+            self.horizontal_bottom = Line(width=factor4, points=[0, 0, x, 0])
 
-        round_info = AnotherLabel(font_size='14sp',
+        round_info = AnotherLabel(font_size='17sp',
                                   text='[b]' + self.info[0] + '\n' + '[color=FFFFFF]' + self.info[
                                       1] + '[/color]' + '[/b]')
         self.add_widget(round_info)
@@ -486,6 +490,64 @@ class Standings(Screen, FloatLayout):
             pass
         else:
             screens_used.append('Standings()')
+
+
+########################################################################################################################
+# Changelog Screen Setup.
+########################################################################################################################
+
+
+class ChangeLogScreen(Screen, FloatLayout):
+
+    log_text_1 = StringProperty(
+        '\n[u]' + 'ELS v1.2.4 - Current Release' + '[/u]'
+        + '\n\n> New: Changelog Screen! A brief, one-off notification of recent changes & improvements!'
+        + '\n\n> Graphical improvements & corrections' + '\n\n> Corrected a few typos')
+
+    def __init__(self, **kwargs):
+        super(ChangeLogScreen, self).__init__(**kwargs)
+
+        with self.canvas.before:
+            Color(1, 1, 1, 1)
+            self.rect = Rectangle(size=self.size, pos=self.pos)
+        self.bind(size=self.update_rect)
+
+        got_it = GotItButton(text='OK, GOT IT !', size_hint=[.8, .097],
+                             pos_hint={'center_x': .5, 'center_y': .1})
+        got_it.bind(on_press=callback_to_sc1a,
+                    width=lambda *x: got_it.setter("text_size")(got_it, (got_it.width, None)),
+                    texture_size=lambda *x: got_it.setter("height")(got_it, got_it.texture_size[1]))
+        self.add_widget(got_it)
+
+        header = Label(text='C h a n g e l o g', font_size='30sp',
+                       pos_hint={'center_x': .5, 'center_y': .93},
+                       color=(0, 0, 0, 1),
+                       halign='center', valign='middle',
+                       font_name='Roboto-Regular')
+        header.bind(width=lambda *x: header.setter("text_size")(header, (header.width, None)),
+                    texture_size=lambda *x: header.setter("height")(header, header.texture_size[1]))
+        self.add_widget(header)
+
+        log1 = Label(text=self.log_text_1, font_size='17sp',
+                     pos_hint={'center_x': .5, 'center_y': .6},
+                     size_hint=[.9, 1],
+                     color=(0, 0, 0, 1),
+                     halign='center', valign='middle',
+                     font_name='Roboto-Regular',
+                     markup=True)
+        log1.bind(width=lambda *x: log1.setter("text_size")(log1, (log1.width, None)),
+                  texture_size=lambda *x: log1.setter("height")(log1, log1.texture_size[1]))
+        self.add_widget(log1)
+
+    def update_rect(self, *args):
+        self.rect.size = self.size
+        self.rect.pos = self.pos
+
+    def on_enter(self, *args):
+        if 'ChangeLogScreen()' in screens_used:
+            pass
+        else:
+            screens_used.append('ChangeLogScreen()')
 
 
 ########################################################################################################################
@@ -524,7 +586,10 @@ class LandingScreen(Screen, FloatLayout):
                 self.rect = Rectangle(size=self.size, pos=self.pos)
             self.bind(size=self.update_rect)
 
-            im = Image(source='Logo.png', size_hint=[1, .5], pos_hint={'center_x': .5, 'center_y': .7})
+            im = Image(source='Logo.png', size_hint=[None, None],
+                       pos_hint={'center_x': .5, 'center_y': .7},
+                       width='330dp',
+                       height='330dp')
             self.add_widget(im)
 
             '''btn1 = ASpecialButton(text='This text will not show!', size_hint=[.497, .097],
@@ -532,7 +597,7 @@ class LandingScreen(Screen, FloatLayout):
             btn1.bind(width=lambda *x: btn1.setter("text_size")(btn1, (btn1.width, None)),
                       texture_size=lambda *x: btn1.setter("height")(btn1, btn1.texture_size[1]))'''
 
-            btn1_ = AnotherSpecialButton(text='Enter', size_hint=[.6, .097],
+            btn1_ = AnotherSpecialButton(text='Statistics', size_hint=[.7, .097],
                                          pos_hint={'center_x': .5, 'center_y': .3})
             btn1_.bind(on_press=callback_to_sc1a,
                        width=lambda *x: btn1_.setter("text_size")(btn1_, (btn1_.width, None)),
@@ -543,13 +608,13 @@ class LandingScreen(Screen, FloatLayout):
             btn2.bind(width=lambda *x: btn2.setter("text_size")(btn2, (btn2.width, None)),
                       texture_size=lambda *x: btn2.setter("height")(btn2, btn2.texture_size[1]))'''
 
-            btn2_ = AnotherSpecialButton(text='Standings', size_hint=[.6, .097],
+            btn2_ = AnotherSpecialButton(text='Standings', size_hint=[.7, .097],
                                          pos_hint={'center_x': .5, 'center_y': .15})
             btn2_.bind(on_press=callback_to_sc1b,
                        width=lambda *x: btn2_.setter("text_size")(btn2_, (btn2_.width, None)),
                        texture_size=lambda *x: btn2_.setter("height")(btn2_, btn2_.texture_size[1]))
 
-            version = Label(text='v1.2.3', font_size='10', color=(0, .6, .8, 1), size_hint=[.25, .05],
+            version = Label(text='v1.2.4', font_size='10sp', color=(0, .6, .8, 1), size_hint=[.25, .05],
                             pos_hint={'x': .75, 'y': 0}, halign='right', valign='middle')
             version.bind(width=lambda *x: version.setter("text_size")(version, (version.width, None)),
                          texture_size=lambda *x: version.setter("height")(version, version.texture_size[1]))
@@ -561,11 +626,21 @@ class LandingScreen(Screen, FloatLayout):
         self.rect.size = self.size
         self.rect.pos = self.pos
 
+    @staticmethod
+    def show_changelog_on_startup():
+        conf = ConfigParser.ConfigParser()
+        conf.readfp(open('els.ini'))
+        if conf.getboolean('Init', 'show_changelog_on_startup'):
+            sm.switch_to(ChangeLogScreen())
+        else:
+            pass
+
     def on_enter(self, *args):
         if 'LandingScreen()' in screens_used:
             pass
         else:
             screens_used.append('LandingScreen()')
+        self.show_changelog_on_startup()
 
 
 ########################################################################################################################
@@ -573,7 +648,17 @@ class LandingScreen(Screen, FloatLayout):
 
 
 def callback_to_sc1a(*args):
-    sm.switch_to(Teams())
+    if screens_used[-1] == 'ChangeLogScreen()':
+        conf = ConfigParser.ConfigParser()
+        conf.readfp(open('els.ini'))
+        conf.set('Init', 'show_changelog_on_startup', 'false')
+        with open('els.ini', 'wb') as f:
+            conf.write(f)
+
+        del screens_used[-1]
+        sm.switch_to(LandingScreen())
+    else:
+        sm.switch_to(Teams())
 
 
 def callback_to_sc1b(*args):
@@ -627,9 +712,11 @@ class MyScreenManager(ScreenManager):
 
     def android_back_click(self, window, key, *largs):
         if key in [27, 1001]:
-            if screens_used[-1] != 'LandingScreen()':
+            if screens_used[-1] not in ['LandingScreen()', 'ChangeLogScreen()']:
                 del screens_used[-1]
                 self.back = True
+                return True
+            elif screens_used[-1] == 'ChangeLogScreen()':
                 return True
             else:
                 ExitPopup().open()
@@ -647,9 +734,14 @@ screens_used = []
 x = Window.system_size[0]
 y = Window.system_size[1]
 
-factor1 = Metrics.dpi * .40044  # factor for logo images, is 40 for my laptop screen, dpi=99.8892
-factor2 = Metrics.dpi * .70077  # factor for rim.png, is 70 for my laptop screen, dpi=99.8892
-factor3 = Metrics.dpi * .30033  # factor for middle circle in 'teams' screen, is 30 for my laptop screen, dpi=99.8892
+factor1 = round(Metrics.dpi * .40044, 0)  # factor for logo images, is 38 for my laptop screen, dpi=99.8892
+# factor2 = round(Metrics.dpi * .70077, 0)  # factor for rim.png, is 67 for my laptop screen, dpi=99.8892
+factor3 = round(Metrics.dpi * .30033,
+                0)  # factor for middle circle in 'teams' screen, is 29 for my laptop screen, dpi=99.8892
+factor4 = round(Metrics.dpi * .03003, 0)  # factor for border lines etc., is 3 for my laptop screen, dpi=99.8892
+factor5 = round(Metrics.dpi * .02002, 0)  # factor for bar width, is 2 for my laptop screen, dpi=99.8892
+factor6 = round(Metrics.dpi * .0,
+                0)  # factor for bar margin in :cls: Roster, is 2 for my laptop screen, dpi=99.8892
 
 offset = (x / 2 - 2 * factor1) / 3
 a = factor1 + factor1 / 2  # 67.5 for my laptop screen, dpi=99.8892
