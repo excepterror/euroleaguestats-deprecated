@@ -7,10 +7,14 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.popup import Popup
+from kivy.metrics import Metrics
 
 from library import check_opponents
 from library3 import per_game_statistics, per_game_stats, get_opponents
 from library4 import RV
+
+factor5 = round(Metrics.dpi * .02002, 0)  # factor for bar width, is 2 for my laptop screen, dpi=99.8892
+factor6 = round(Metrics.dpi * .06006, 0)  # factor for bar margin, is 6 for my laptop screen, dpi=99.8892
 
 
 ########################################################################################################################
@@ -77,7 +81,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         super(SelectableLabel, self).__init__(**kwargs)
         self.halign = "center"
         self.valign = "middle"
-        self.font_size = "13sp"
+        self.font_size = "16sp"
         self.color = (.2, .6, .8, 1)
         self.bind(width=lambda *x: self.setter("text_size")(self, (self.width, None)))
 
@@ -124,8 +128,8 @@ class RVMod(RecycleView):
         self.size_hint = [.95, .85]
         self.pos_hint = {'center_x': .5, 'y': .02}
         self.bar_pos_y = 'left'
-        self.bar_width = 4
-        self.bar_margin = -1
+        self.bar_width = factor5
+        self.bar_margin = -factor6
         self.bar_color = (1, .4, 0, 1)
 
         a = access_per_game_stats(self.tree, self.name)
