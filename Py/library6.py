@@ -14,7 +14,6 @@ y = Window.system_size[1]
 
 factor1 = Metrics.dpi * .40004
 offset = (x / 2 - 2 * factor1) / 3
-factor1 = Metrics.dpi * .40004
 a = factor1 + factor1 / 2
 
 
@@ -22,7 +21,7 @@ class MyLabel(ButtonBehavior, Label):
     # Used in Class 'Options' for button customisation - main.py.
     def __init__(self, **kwargs):
         super(MyLabel, self).__init__(**kwargs)
-        self.font_size = "15sp"
+        self.font_size = "17sp"
         self.color = [0, .6, .6, .8]
         self.halign = "center"
         self.valign = "middle"
@@ -151,7 +150,7 @@ class MyOtherLabel(Label):
     def __init__(self, **kwargs):
         super(MyOtherLabel, self).__init__(**kwargs)
         # self.font_size = "14sp"
-        self.size_hint = [.96, .066]
+        self.size_hint = [.94, .066]
         self.pos_hint = {'center_x': .5, 'y': .90}
         self.color = (1, 1, 1, 1)
         self.halign = "center"
