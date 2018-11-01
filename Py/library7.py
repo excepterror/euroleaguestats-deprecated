@@ -14,7 +14,7 @@ class AnotherSpecialButton(ButtonBehavior, Label):
 
     def __init__(self, **kwargs):
         super(AnotherSpecialButton, self).__init__(**kwargs)
-        self.font_size = "17sp"
+        self.font_size = "19sp"
         self.color = [1, 1, 1, 1]
         self.halign = "center"
         self.valign = "middle"
@@ -53,7 +53,7 @@ class PlayerButton(Button):
     # Used in Class 'Roster' - main.py.
     def __init__(self, **kwargs):
         super(PlayerButton, self).__init__(**kwargs)
-        self.font_size = "14sp"
+        self.font_size = "16sp"
         self.color = [0, 0, 0, 1]
         self.background_normal = ""
         self.background_color = [1, 1, 1, .6]
