@@ -60,7 +60,7 @@ class AnotherLabel(Label):
     def __init__(self, **kwargs):
         super(AnotherLabel, self).__init__(**kwargs)
         # self.font_size = "14sp"
-        self.size_hint = [.95, .065]
+        self.size_hint = [.94, .065]
         self.pos_hint = {'center_x': .5, 'y': .90}
         self.color = (1, 1, 1, 1)  # (1, .4, 0, 1)
         self.halign = "center"
