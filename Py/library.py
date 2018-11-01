@@ -8,7 +8,7 @@ from urlparse import urljoin
 def urls_teams():
     # PURPOSE: Returns the names of the teams and the dictionary. Called in 'Class' DraggableLogo - main.py.
     teams_codes = {'Anadolu Efes Istanbul': [1], 'AX Armani Exchange Olimpia Milan': [2],
-                   'Buducnost VOLI Podgorica': [3], 'CSKA Moscow': [4], 'Darussafaka Tefken Istanbul': [5],
+                   'Buducnost VOLI Podgorica': [3], 'CSKA Moscow': [4], 'Darussafaka Tekfen Istanbul': [5],
                    'FC Barcelona Lassa': [6], 'FC Bayern Munich': [7], 'Fenerbahce Istanbul': [8],
                    'Herbalife Gran Canaria': [9], 'Khimki Moscow Region': [10],
                    'KIROLBET Baskonia Vitoria Gasteiz': [11], 'Maccabi FOX Tel Aviv': [12],
