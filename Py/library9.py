@@ -1,6 +1,10 @@
 from kivy.lang import Builder
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.label import Label
+from kivy.metrics import Metrics
+
+factor5 = round(Metrics.dpi * .02002, 0)  # factor for bar width, is 2 for my laptop screen, dpi=99.8892
+factor6 = round(Metrics.dpi * .06006, 0)  # factor for bar margin, is 6 for my laptop screen, dpi=99.8892
 
 ########################################################################################################################
 # RecycleView Widget. Called in Class 'Standings' - library8.py. Used for the presentation of standings.
@@ -38,7 +42,7 @@ class DataLabel(Label):
         self.padding = [0, 0]
         self.halign = "center"
         self.valign = "middle"
-        self.font_size = '14sp'
+        self.font_size = '16sp'
         self.color = [1, .4, 0, 1]
         self.markup = True
         self.bind(width=lambda *x: self.setter("text_size")(self, (self.width, None)),
@@ -54,8 +58,8 @@ class RVSt(RecycleView):
         self.pos_hint = {'center_x': .5, 'top': .86}
         self.bar_pos_y = 'left'
         self.bar_color = (.2, .6, .8, 1)
-        self.bar_margin = -6
-        self.bar_width = 3
+        self.bar_margin = -factor6
+        self.bar_width = factor5
 
         self.data = [{'text': '[b]' + str(
             team) + '[/b]' + '\n' + '[b][color=0099CC] W   L   PTS+   PTS-   +/-[/color][/b]' + '\n' + '[i]' + str(
