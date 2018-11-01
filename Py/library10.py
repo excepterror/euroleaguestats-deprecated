@@ -1,5 +1,9 @@
 import socket
 
+from kivy.uix.label import Label
+from kivy.graphics import Color, RoundedRectangle
+from kivy.uix.button import ButtonBehavior
+
 
 def is_connected(hostname):
     # Called by :cls: 'Standings' - main.py.
@@ -16,3 +20,23 @@ def is_connected(hostname):
     except:
         pass
     return False
+
+
+class GotItButton(ButtonBehavior, Label):
+    """This widget is practically an overlay to the widget below."""
+
+    def __init__(self, **kwargs):
+        super(GotItButton, self).__init__(**kwargs)
+        self.font_size = "19sp"
+        self.color = [1, 1, 1, 1]
+        self.halign = "center"
+        self.valign = "middle"
+
+        with self.canvas.before:
+            Color(0, .6, .6, 1, mode='rgba')
+            self.rect = RoundedRectangle(pos=self.pos, size=self.size, segments=40, radius=[22, ])
+        self.bind(size=self.update_rect)
+
+    def update_rect(self, *args):
+        self.rect.pos = self.pos
+        self.rect.size = self.size
