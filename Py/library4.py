@@ -1,6 +1,10 @@
 from kivy.lang import Builder
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.label import Label
+from kivy.metrics import Metrics
+
+factor5 = round(Metrics.dpi * .02002, 0)  # factor for bar width, is 2 for my laptop screen, dpi=99.8892
+factor6 = round(Metrics.dpi * .06006, 0)  # factor for bar margin, is 6 for my laptop screen, dpi=99.8892
 
 ########################################################################################################################
 # RecycleView Widget. Called by :cls: 'Options'. Used for the presentation of average & total stats.
@@ -30,6 +34,7 @@ class StatLabel(Label):
         self.valign = "middle"
         self.color = [0, 0, 0, 1]
         self.bind(width=lambda *x: self.setter("text_size")(self, (self.width, None)))
+        self.markup = True
 
 
 class RV(RecycleView):
@@ -38,7 +43,8 @@ class RV(RecycleView):
         super(RV, self).__init__(**kwargs)
         self.bar_pos_y = 'left'
         self.bar_color = (.2, .6, .8, 1)
-        self.bar_margin = -4
-        self.bar_width = 3
-        self.data = [{'text': str(stat_category.upper()) + "   " + str(data_element)} for stat_category, data_element in
+        self.bar_margin = -factor6
+        self.bar_width = factor5
+        self.data = [{'text': '[b]' + str(stat_category.upper()) + '[/b]' + "   " + str(data_element)} for
+                     stat_category, data_element in
                      stat_dict.iteritems()]
