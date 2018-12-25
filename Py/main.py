@@ -11,7 +11,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.graphics import Rectangle, Color, Line
 from kivy.uix.popup import Popup
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.screenmanager import ScreenManager, Screen, FallOutTransition
@@ -36,15 +35,15 @@ from library10 import is_connected, GotItButton
 
 kivy.require('1.10.1')
 
-
 ########################################################################################################################
 # Stats by game Screen Setup.
 ########################################################################################################################
 
 
-class GameStats(Screen, FloatLayout):
+class GameStats(Screen):
     def __init__(self, **kwargs):
         super(GameStats, self).__init__(**kwargs)
+        self.name = 'game_stats'
 
         self.add_widget(Image(source='Court.jpg', allow_stretch=True, keep_ratio=False))
 
@@ -73,9 +72,10 @@ class GameStats(Screen, FloatLayout):
 ########################################################################################################################
 
 
-class Options(Screen, FloatLayout):
+class Options(Screen):
     def __init__(self, **kwargs):
         super(Options, self).__init__(**kwargs)
+        self.name = 'options'
 
         self.add_widget(Image(source='Court.jpg', allow_stretch=True, keep_ratio=False))
 
@@ -100,7 +100,7 @@ class Options(Screen, FloatLayout):
                    width='210dp',
                    pos_hint={'center_x': .5, 'y': .67})
 
-        name = MyOtherLabel(text=self.player_name, font_size='17sp')
+        pl_name = MyOtherLabel(text=self.player_name, font_size='17sp')
 
         num_pos = Label(text=str(self.num) + " | " + str(self.position), color=[0, 0, 0, 1], font_size='17sp',
                         size_hint=[1, None], halign="center", valign="middle")
@@ -114,17 +114,17 @@ class Options(Screen, FloatLayout):
 
         grid1 = GridLayout(size_hint=[1, .1], cols=1, rows=3, spacing=7, padding=10, pos_hint={'x': 0, 'y': .55})
 
-        btn_for_all = MyLabel(text="Stats by game!", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .37})
+        btn_for_all = MyLabel(text="Stats by game", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .37})
         btn_for_all.bind(on_release=callback_to_sc4,
                          width=lambda *x: btn_for_all.setter("text_size")(btn_for_all, (btn_for_all.width, None)),
                          texture_size=lambda *x: btn_for_all.setter("height")(btn_for_all, btn_for_all.texture_size[1]))
 
-        btn_for_av = MyLabel(text="Average Stats!", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .23})
+        btn_for_av = MyLabel(text="Average Stats", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .23})
         btn_for_av.bind(on_release=lambda *x: self.access_average_stats(),
                         width=lambda *x: btn_for_av.setter("text_size")(btn_for_av, (btn_for_av.width, None)),
                         texture_size=lambda *x: btn_for_av.setter("height")(btn_for_av, btn_for_av.texture_size[1]))
 
-        btn_for_tot = MyLabel(text="Total Stats!", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .09})
+        btn_for_tot = MyLabel(text="Total Stats", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .09})
         btn_for_tot.bind(on_release=lambda x: self.access_total_stats(),
                          width=lambda *x: btn_for_tot.setter("text_size")(btn_for_tot, (btn_for_tot.width, None)),
                          texture_size=lambda *x: btn_for_tot.setter("height")(btn_for_tot, btn_for_tot.texture_size[1]))
@@ -132,7 +132,7 @@ class Options(Screen, FloatLayout):
         for w in [num_pos, bio]:
             grid1.add_widget(w)
 
-        for w in [name, ph, btn_for_all, btn_for_av, btn_for_tot, grid1]:
+        for w in [pl_name, ph, btn_for_all, btn_for_av, btn_for_tot, grid1]:
             self.add_widget(w)
 
         if filename != 'NoImage.jpg':
@@ -191,9 +191,10 @@ class Options(Screen, FloatLayout):
 ########################################################################################################################
 
 
-class Roster(Screen, FocusBehavior, FloatLayout):
+class Roster(Screen, FocusBehavior):
     def __init__(self, **kwargs):
         super(Roster, self).__init__(**kwargs)
+        self.name = 'roster'
 
         self.size_hint = [1, 1]
         self.pos_hint = {'x': 0, 'y': 0}
@@ -201,6 +202,11 @@ class Roster(Screen, FocusBehavior, FloatLayout):
 
         title = MyOtherLabel(text=self.text + ' Roster', font_size='17sp')
         self.add_widget(title)
+
+        with self.canvas.before:
+            Color(1, 1, 1, 1)
+            self.rect = Rectangle(size=self.size, pos=self.pos)
+        self.bind(size=self.update_rect)
 
         with self.canvas:
             Color(0, .6, .6, 1)
@@ -211,7 +217,7 @@ class Roster(Screen, FocusBehavior, FloatLayout):
 
         # Layouts.
         scrollable_roster = ScrollView(do_scroll_x=False, bar_color=[.2, .6, .8, 1],
-                                       bar_pos_y="left", bar_width=factor5, bar_margin=factor6,
+                                       bar_pos_y="right", bar_width=factor5, bar_margin=factor6,
                                        scroll_type=["bars", "content"],
                                        size_hint=[.95, .84],
                                        pos_hint={'center_x': .5, 'y': .03})
@@ -225,10 +231,14 @@ class Roster(Screen, FocusBehavior, FloatLayout):
         self.add_widget(scrollable_roster)
 
         # Widgets.
-        for name, url in self.roster_n.items():
-            btn_player = PlayerButton(text=str(name))
+        for pl_name, url in self.roster_n.items():
+            btn_player = PlayerButton(text=str(pl_name))
             btn_player.bind(on_release=callback_to_sc3)
             grid.add_widget(btn_player)
+
+    def update_rect(self, *args):
+        self.rect.size = self.size
+        self.rect.pos = self.pos
 
     def on_enter(self, *args):
         if 'Roster()' in screens_used:
@@ -243,7 +253,7 @@ class Roster(Screen, FocusBehavior, FloatLayout):
 
 
 class DraggableLogo(DragBehavior, Widget):
-    """This is a draggable widget (Ellipse, Rectangle or Image) that can be used anywhere you want. It currently makes a
+    """This is a draggable widget (Ellipse, Rectangle or Image) with potentially multiple uses. It currently makes a
      bunch of images draggable and adds a few effects too!"""
 
     def __init__(self, **kwargs):
@@ -285,7 +295,7 @@ class DraggableLogo(DragBehavior, Widget):
         sx, sy = self.pos
 
         if self.collide_point(*touch.pos) and sx + factor1 >= tx > sx and sy + factor1 >= ty > sy:
-            # The two extra conditions must be met otherwise the opacity will be changed for all widget's children!
+            # The two extra conditions must be met otherwise the opacity will be changed for all children!
             self.im.opacity = 1
             self.logo.opacity = .5
 
@@ -297,14 +307,14 @@ class DraggableLogo(DragBehavior, Widget):
 
             if image_name in teams_up:
                 for child in self.children:
-                    # Checks to see if tooltip is already added & avoids subsequent crash.
+                    # Checks to see if tooltip is already activated.
                     if self.tooltip_up not in self.children:
                         self.tooltip_up.text = image_name
                         self.add_widget(self.tooltip_up)
                         Clock.schedule_once(self.remove_info_1, 1.5)
             elif image_name in teams_down:
                 for child in self.children:
-                    # Checks to see if tooltip is already added & avoids subsequent crash.
+                    # Checks to see if tooltip is already activated. 
                     if self.tooltip_down not in self.children:
                         self.tooltip_down.text = image_name
                         self.add_widget(self.tooltip_down)
@@ -334,7 +344,7 @@ class DraggableLogo(DragBehavior, Widget):
                          'Darussafaka Tekfen Istanbul.png': [offset, y - 2.5 * a],
                          'FC Barcelona Lassa.png': [factor1 + 2 * offset, y - 2.5 * a],
                          'FC Bayern Munich.png': [x - 2 * factor1 - 2 * offset, y - 2.5 * a],
-                         'Fenerbahce Istanbul.png': [x - offset - factor1, y - 2.5 * a],
+                         'Fenerbahce Beko Istanbul.png': [x - offset - factor1, y - 2.5 * a],
                          'Herbalife Gran Canaria.png': [offset, 1.5 * a + factor1 / 2],
                          'Khimki Moscow Region.png': [factor1 + 2 * offset, 1.5 * a + factor1 / 2],
                          'KIROLBET Baskonia Vitoria Gasteiz.png': [x - 2 * factor1 - 2 * offset, 1.5 * a + factor1 / 2],
@@ -375,10 +385,11 @@ class DraggableLogo(DragBehavior, Widget):
         return super(DraggableLogo, self).on_touch_up(touch)
 
 
-class Teams(Screen, FloatLayout):
+class Teams(Screen):
     # Menu screen.
     def __init__(self, **kwargs):
         super(Teams, self).__init__(**kwargs)
+        self.name = 'teams'
 
         ph = Image(source='Court.jpg', allow_stretch=True, keep_ratio=False)
         self.add_widget(ph)
@@ -418,7 +429,7 @@ class Teams(Screen, FloatLayout):
         DraggableLogo.emblem = 'FC Bayern Munich.png'
         self.add_widget(DraggableLogo(pos=[x - 2 * factor1 - 2 * offset, y - 2.5 * a]))
 
-        DraggableLogo.emblem = 'Fenerbahce Istanbul.png'
+        DraggableLogo.emblem = 'Fenerbahce Beko Istanbul.png'
         self.add_widget(DraggableLogo(pos=[x - offset - factor1, y - 2.5 * a]))
 
         DraggableLogo.emblem = 'Herbalife Gran Canaria.png'
@@ -457,9 +468,10 @@ class Teams(Screen, FloatLayout):
 ########################################################################################################################
 
 
-class Standings(Screen, FloatLayout):
+class Standings(Screen):
     def __init__(self, **kwargs):
         super(Standings, self).__init__(**kwargs)
+        self.name = 'standings'
 
         with self.canvas.before:
             Color(1, 1, 1, 1)
@@ -482,8 +494,8 @@ class Standings(Screen, FloatLayout):
         self.add_widget(rv_view)
 
     def update_rect(self, *args):
-        self.rect.size = self.size
-        self.rect.pos = self.pos
+        self.rect.size = Window.size
+        # self.rect.pos = self.pos
 
     def on_enter(self, *args):
         if 'Standings()' in screens_used:
@@ -497,15 +509,15 @@ class Standings(Screen, FloatLayout):
 ########################################################################################################################
 
 
-class ChangeLogScreen(Screen, FloatLayout):
-
+class ChangeLogScreen(Screen):
     log_text_1 = StringProperty(
-        '\n[u]' + 'ELS v1.2.4 - Current Release' + '[/u]'
-        + '\n\n> New: Changelog Screen! A brief, one-off notification of recent changes & improvements!'
-        + '\n\n> Graphical improvements & corrections' + '\n\n> Corrected a few typos')
+        '\n[u]' + 'ELS v1.2.5 - Current Release' + '[/u]'
+        + '\n\n> Fixed a bug which caused the app to shut down unexpectedly on some devices.'
+        + '\n\n> Minor improvements and bug fixes.')
 
     def __init__(self, **kwargs):
         super(ChangeLogScreen, self).__init__(**kwargs)
+        self.name = 'changelog'
 
         with self.canvas.before:
             Color(1, 1, 1, 1)
@@ -540,8 +552,8 @@ class ChangeLogScreen(Screen, FloatLayout):
         self.add_widget(log1)
 
     def update_rect(self, *args):
-        self.rect.size = self.size
-        self.rect.pos = self.pos
+        self.rect.size = Window.size
+        # self.rect.pos = self.pos
 
     def on_enter(self, *args):
         if 'ChangeLogScreen()' in screens_used:
@@ -555,76 +567,55 @@ class ChangeLogScreen(Screen, FloatLayout):
 ########################################################################################################################
 
 
-class LandingScreen(Screen, FloatLayout):
+class LandingScreen(Screen):
     def __init__(self, **kwargs):
         super(LandingScreen, self).__init__(**kwargs)
+        self.name = 'landing'
 
-        c = is_connected("www.euroleague.net")
-        if c is False:
-            with self.canvas.before:
-                Color(1, 1, 1, .1)
-                self.rect = Rectangle(size=self.size, pos=self.pos)
-            self.bind(size=self.update_rect)
+        with self.canvas.before:
+            Color(1, 1, 1, 1)
+            self.rect = Rectangle(size=self.size, pos=self.pos)
+        self.bind(size=self.update_rect)
 
-            message = Label(
-                text="Could not connect to www.euroleague.net. Please, close the app and check you network connection.",
-                font_size="13sp", color=[0, 0, 0, 1], size_hint_y=None, pos_hint={"x": .5, "y": .35},
-                halign="center", valign="center")
-            message.bind(width=lambda *x: message.setter("text_size")(message, (message.width, None)),
-                         texture_size=lambda *x: message.setter("height")(message, message.texture_size[1]))
+        im = Image(source='Logo.png', size_hint=[None, None],
+                   pos_hint={'center_x': .5, 'center_y': .7},
+                   width='330dp',
+                   height='330dp')
+        self.add_widget(im)
 
-            warning_popup = Popup(content=message, size_hint=[.8, .4], title="Connection Error",
-                                  title_size="15sp", title_color=[0, 0, 0, 1], separator_color=[1, .4, 0, 1],
-                                  title_font="Roboto-Regular", background="atlas://data/images/defaulttheme/textinput",
-                                  pos_hint={'center_x': .5, 'center_y': .5}, auto_dismiss=False)
-            warning_popup.open()
+        '''btn1 = ASpecialButton(text='This text will not show!', size_hint=[.497, .097],
+                              pos_hint={'center_x': .5, 'center_y': .3})
+        btn1.bind(width=lambda *x: btn1.setter("text_size")(btn1, (btn1.width, None)),
+                  texture_size=lambda *x: btn1.setter("height")(btn1, btn1.texture_size[1]))'''
 
-        else:
+        btn1_ = AnotherSpecialButton(text='Statistics', size_hint=[.7, .097],
+                                     pos_hint={'center_x': .5, 'center_y': .3})
+        btn1_.bind(on_press=callback_to_sc1a,
+                   width=lambda *x: btn1_.setter("text_size")(btn1_, (btn1_.width, None)),
+                   texture_size=lambda *x: btn1_.setter("height")(btn1_, btn1_.texture_size[1]))
 
-            with self.canvas.before:
-                Color(1, 1, 1, 1)
-                self.rect = Rectangle(size=self.size, pos=self.pos)
-            self.bind(size=self.update_rect)
+        '''btn2 = ASpecialButton(text='This text will not show!', size_hint=[.497, .097],
+                              pos_hint={'center_x': .5, 'center_y': .15})
+        btn2.bind(width=lambda *x: btn2.setter("text_size")(btn2, (btn2.width, None)),
+                  texture_size=lambda *x: btn2.setter("height")(btn2, btn2.texture_size[1]))'''
 
-            im = Image(source='Logo.png', size_hint=[None, None],
-                       pos_hint={'center_x': .5, 'center_y': .7},
-                       width='330dp',
-                       height='330dp')
-            self.add_widget(im)
+        btn2_ = AnotherSpecialButton(text='Standings', size_hint=[.7, .097],
+                                     pos_hint={'center_x': .5, 'center_y': .15})
+        btn2_.bind(on_press=callback_to_sc1b,
+                   width=lambda *x: btn2_.setter("text_size")(btn2_, (btn2_.width, None)),
+                   texture_size=lambda *x: btn2_.setter("height")(btn2_, btn2_.texture_size[1]))
 
-            '''btn1 = ASpecialButton(text='This text will not show!', size_hint=[.497, .097],
-                                  pos_hint={'center_x': .5, 'center_y': .3})
-            btn1.bind(width=lambda *x: btn1.setter("text_size")(btn1, (btn1.width, None)),
-                      texture_size=lambda *x: btn1.setter("height")(btn1, btn1.texture_size[1]))'''
+        version = Label(text='v1.2.5', font_size='10sp', color=(0, .6, .8, 1), size_hint=[.25, .05],
+                        pos_hint={'x': .75, 'y': 0}, halign='right', valign='middle')
+        version.bind(width=lambda *x: version.setter("text_size")(version, (version.width, None)),
+                     texture_size=lambda *x: version.setter("height")(version, version.texture_size[1]))
 
-            btn1_ = AnotherSpecialButton(text='Statistics', size_hint=[.7, .097],
-                                         pos_hint={'center_x': .5, 'center_y': .3})
-            btn1_.bind(on_press=callback_to_sc1a,
-                       width=lambda *x: btn1_.setter("text_size")(btn1_, (btn1_.width, None)),
-                       texture_size=lambda *x: btn1_.setter("height")(btn1_, btn1_.texture_size[1]))
-
-            '''btn2 = ASpecialButton(text='This text will not show!', size_hint=[.497, .097],
-                                  pos_hint={'center_x': .5, 'center_y': .15})
-            btn2.bind(width=lambda *x: btn2.setter("text_size")(btn2, (btn2.width, None)),
-                      texture_size=lambda *x: btn2.setter("height")(btn2, btn2.texture_size[1]))'''
-
-            btn2_ = AnotherSpecialButton(text='Standings', size_hint=[.7, .097],
-                                         pos_hint={'center_x': .5, 'center_y': .15})
-            btn2_.bind(on_press=callback_to_sc1b,
-                       width=lambda *x: btn2_.setter("text_size")(btn2_, (btn2_.width, None)),
-                       texture_size=lambda *x: btn2_.setter("height")(btn2_, btn2_.texture_size[1]))
-
-            version = Label(text='v1.2.4', font_size='10sp', color=(0, .6, .8, 1), size_hint=[.25, .05],
-                            pos_hint={'x': .75, 'y': 0}, halign='right', valign='middle')
-            version.bind(width=lambda *x: version.setter("text_size")(version, (version.width, None)),
-                         texture_size=lambda *x: version.setter("height")(version, version.texture_size[1]))
-
-            for w in [btn1_, btn2_, version]:
-                self.add_widget(w)
+        for w in [btn1_, btn2_, version]:
+            self.add_widget(w)
 
     def update_rect(self, *args):
-        self.rect.size = self.size
-        self.rect.pos = self.pos
+        self.rect.size = Window.size
+        # self.rect.pos = self.pos
 
     @staticmethod
     def show_changelog_on_startup():
@@ -641,6 +632,44 @@ class LandingScreen(Screen, FloatLayout):
         else:
             screens_used.append('LandingScreen()')
         self.show_changelog_on_startup()
+
+
+########################################################################################################################
+# 'No Internet Connection Screen Setup.
+########################################################################################################################
+
+class NoConnectionScreen(Screen):
+    def __init__(self, **kwargs):
+        super(NoConnectionScreen, self).__init__(**kwargs)
+        self.name = 'no_connection'
+
+        with self.canvas.before:
+            Color(1, 1, 1, .1)
+            self.rect = Rectangle(size=self.size, pos=self.pos)
+        self.bind(size=self.update_rect)
+
+        message = Label(
+            text="Could not connect to www.euroleague.net. Please, close the app and check you network connection.",
+            font_size="13sp", color=[0, 0, 0, 1], size_hint_y=None, pos_hint={"x": .5, "y": .35},
+            halign="center", valign="center")
+        message.bind(width=lambda *x: message.setter("text_size")(message, (message.width, None)),
+                     texture_size=lambda *x: message.setter("height")(message, message.texture_size[1]))
+
+        warning_popup = Popup(content=message, size_hint=[.8, .4], title="Connection Error",
+                              title_size="15sp", title_color=[0, 0, 0, 1], separator_color=[1, .4, 0, 1],
+                              title_font="Roboto-Regular", background="atlas://data/images/defaulttheme/textinput",
+                              pos_hint={'center_x': .5, 'center_y': .5}, auto_dismiss=False)
+        warning_popup.open()
+
+    def update_rect(self, *args):
+        self.rect.size = self.size
+        self.rect.pos = self.pos
+
+    def on_enter(self, *args):
+        if 'NoConnectionScreen()' in screens_used:
+            pass
+        else:
+            screens_used.append('NoConnectionScreen()')
 
 
 ########################################################################################################################
@@ -712,7 +741,7 @@ class MyScreenManager(ScreenManager):
 
     def android_back_click(self, window, key, *largs):
         if key in [27, 1001]:
-            if screens_used[-1] not in ['LandingScreen()', 'ChangeLogScreen()']:
+            if screens_used[-1] not in ['LandingScreen()', 'ChangeLogScreen()', 'NoConnectionScreen()']:
                 del screens_used[-1]
                 self.back = True
                 return True
@@ -750,7 +779,11 @@ c = factor1 / 2  # 22.5 for my laptop screen, dpi=99.8892
 
 class EuroLeagueStatsApp(App):
     def build(self):
-        sm.add_widget(LandingScreen())
+        check_con = is_connected("www.euroleague.net")
+        if check_con:
+            sm.add_widget(LandingScreen())
+        else:
+            sm.add_widget(NoConnectionScreen())
         return sm
 
 
