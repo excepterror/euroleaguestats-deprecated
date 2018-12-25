@@ -8,7 +8,7 @@ from kivy.graphics import Color, RoundedRectangle
 
 def get_standings():
     # Used in :meth: callback_to_sc1b - main.py.
-    url = "http://www.euroleague.net/main/standings?seasoncode=E2018"
+    url = "https://www.euroleague.net/main/standings?seasoncode=E2018"
     response = requests.get(url)
     tree = etree.HTML(response.content)
 

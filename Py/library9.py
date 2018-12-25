@@ -56,7 +56,7 @@ class RVSt(RecycleView):
 
         self.size_hint = [.9, .85]
         self.pos_hint = {'center_x': .5, 'top': .86}
-        self.bar_pos_y = 'left'
+        self.bar_pos_y = 'right'
         self.bar_color = (.2, .6, .8, 1)
         self.bar_margin = -factor6
         self.bar_width = factor5

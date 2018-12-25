@@ -9,7 +9,7 @@ def urls_teams():
     # PURPOSE: Returns the names of the teams and the dictionary. Called in 'Class' DraggableLogo - main.py.
     teams_codes = {'Anadolu Efes Istanbul': [1], 'AX Armani Exchange Olimpia Milan': [2],
                    'Buducnost VOLI Podgorica': [3], 'CSKA Moscow': [4], 'Darussafaka Tekfen Istanbul': [5],
-                   'FC Barcelona Lassa': [6], 'FC Bayern Munich': [7], 'Fenerbahce Istanbul': [8],
+                   'FC Barcelona Lassa': [6], 'FC Bayern Munich': [7], 'Fenerbahce Beko Istanbul': [8],
                    'Herbalife Gran Canaria': [9], 'Khimki Moscow Region': [10],
                    'KIROLBET Baskonia Vitoria Gasteiz': [11], 'Maccabi FOX Tel Aviv': [12],
                    'Olympiacos Piraeus': [13], 'Panathinaikos OPAP Athens': [14], 'Real Madrid': [15],
@@ -26,7 +26,7 @@ def get_players(suffix):
     players_names = []
     players_urls = []
     player_dict = {}
-    base_url = "http://www.euroleague.net/competition/players?team="
+    base_url = "https://www.euroleague.net/competition/players?team="
     url = base_url + str(suffix)
     response = requests.get(url)
     tree = etree.HTML(response.content)
@@ -38,7 +38,7 @@ def get_players(suffix):
         players_names.append(data.partition(" " * 24)[-1].rpartition("\r")[0])
     # Fixes urls.
     for link in urls:
-        players_urls.append(urljoin("http://www.euroleague.net/", link))
+        players_urls.append(urljoin("https://www.euroleague.net/", link))
     # Creates dict with players names, urls and also assigns a num to each of them.
     for i, name in enumerate(players_names):
         if name in player_dict:

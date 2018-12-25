@@ -15,7 +15,7 @@ Builder.load_string('''
 <RV>:
     viewclass: 'StatLabel'
     RecycleBoxLayout:
-        default_size: None, dp(56)
+        default_size: None, dp(36)
         default_size_hint: 1, None
         size_hint_y: None
         height: self.minimum_height
@@ -41,7 +41,7 @@ class RV(RecycleView):
     # The RecycleView Widget. Used for presenting average and total stats.
     def __init__(self, stat_dict, **kwargs):
         super(RV, self).__init__(**kwargs)
-        self.bar_pos_y = 'left'
+        self.bar_pos_y = 'right'
         self.bar_color = (.2, .6, .8, 1)
         self.bar_margin = -factor6
         self.bar_width = factor5

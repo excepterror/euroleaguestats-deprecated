@@ -14,7 +14,7 @@ from library3 import per_game_statistics, per_game_stats, get_opponents
 from library4 import RV
 
 factor5 = round(Metrics.dpi * .02002, 0)  # factor for bar width, is 2 for my laptop screen, dpi=99.8892
-factor6 = round(Metrics.dpi * .06006, 0)  # factor for bar margin, is 6 for my laptop screen, dpi=99.8892
+factor6 = round(Metrics.dpi * .01001, 0)  # factor for bar margin, is 1 for my laptop screen, dpi=99.8892
 
 
 ########################################################################################################################
@@ -127,7 +127,7 @@ class RVMod(RecycleView):
         self.viewclass = 'SelectableLabel'
         self.size_hint = [.95, .85]
         self.pos_hint = {'center_x': .5, 'y': .02}
-        self.bar_pos_y = 'left'
+        self.bar_pos_y = 'right'
         self.bar_width = factor5
         self.bar_margin = -factor6
         self.bar_color = (1, .4, 0, 1)
