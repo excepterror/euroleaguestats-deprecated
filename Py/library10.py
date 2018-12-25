@@ -4,7 +4,6 @@ from kivy.uix.label import Label
 from kivy.graphics import Color, RoundedRectangle
 from kivy.uix.button import ButtonBehavior
 
-
 def is_connected(hostname):
     # Called by :cls: 'Standings' - main.py.
     try:
