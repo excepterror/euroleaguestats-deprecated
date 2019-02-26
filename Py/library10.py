@@ -7,11 +7,11 @@ from kivy.uix.popup import Popup
 from kivy.uix.floatlayout import FloatLayout
 
 
-# from jnius import autoclass
+from jnius import autoclass
 
 
 def resolve_connectivity():
-    available_net = True  # check_network_availability()
+    available_net = check_network_availability()
     if available_net:
         available_site = is_connected('www.euroleague.net')
         if available_site:
