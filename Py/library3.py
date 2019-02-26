@@ -77,21 +77,21 @@ def per_game_stats(tree):
         "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_RS']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td/text()")
     games_played_rs = len(games_stats_rs) / 17
-    for i in range(games_played_rs):
+    for i in range(int(games_played_rs)):
         del games_stats_rs[16 * i]
     # Stats for each round played in POs.
     games_stats_po = tree.xpath(
         "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_PO']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td/text()")
     games_played_po = len(games_stats_po) / 17
-    for i in range(games_played_po):
+    for i in range(int(games_played_po)):
         del games_stats_po[16 * i]
     # Stats for each round played in FF.
     games_stats_ff = tree.xpath(
         "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_FF']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td/text()")
     games_played_ff = len(games_stats_ff) / 17
-    for i in range(games_played_ff):
+    for i in range(int(games_played_ff)):
         del games_stats_ff[16 * i]
     return [games_stats_rs, games_stats_po, games_stats_ff]
 
@@ -105,9 +105,9 @@ def per_game_statistics(games_stats_rs, games_stats_po, games_stats_ff, g, p=0):
     games_stats = games_stats_rs + games_stats_po + games_stats_ff
     game_stats = games_stats[i:j]
     for i, stat in enumerate(game_stats):
-        if stat == u"\xa0":
+        if stat == "\xa0":
             game_stats[i] = "---"
-    for k, v in per_game_stats_dict.iteritems():
+    for k, v in per_game_stats_dict.items():
         per_game_stats_dict[k] = game_stats[p]
         p += 1
     del games_stats
@@ -121,7 +121,7 @@ def dict_creator(kind_of_stats, j=0):
     stats = []
     for stat in range(len(kind_of_stats)):
         stats.append(kind_of_stats[stat])
-    for k, v in stats_dict.iteritems():
+    for k, v in stats_dict.items():
         stats_dict[k] = stats[j]
         j += 1
     del stats
