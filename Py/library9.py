@@ -51,7 +51,7 @@ class DataLabel(Label):
 
 class RVSt(RecycleView):
     # The RecycleView Widget. Used for presenting the standings.
-    def __init__(self, teams_performance, **kwargs):
+    def __init__(self, current_teams_standings, **kwargs):
         super(RVSt, self).__init__(**kwargs)
 
         self.size_hint = [.9, .85]
@@ -62,6 +62,5 @@ class RVSt(RecycleView):
         self.bar_width = factor5
 
         self.data = [{'text': '[b]' + str(
-            team) + '[/b]' + '\n' + '[b][color=0099CC] W   L   PTS+   PTS-   +/-[/color][/b]' + '\n' + '[i]' + str(
-            items[1]) + '[/i]'} for team, items in
-                     teams_performance.iteritems()]
+            team) + '[/b]' + '\n' + '[b][color=0099CC] W  L  PTS+  PTS-  +/-[/color][/b]' + '\n' + '[i]' + str(
+            items[1]) + '[/i]'} for team, items in current_teams_standings.items()]
