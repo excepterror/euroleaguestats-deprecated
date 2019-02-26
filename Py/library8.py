@@ -28,31 +28,40 @@ def get_standings():
         "//table[@class='table responsive fixed-cols-1 table-left-cols-1 table-expand table-striped table-hover table-"
         "noborder table-centered table-condensed']/tbody/tr/td/text()")
 
-    round = round_[0].split(",")[:2]
+    round_num = round_[0].split(",")[:2]
 
     teams_standings = []
     for data in standings_teams:
         teams_standings.append(data.partition(" " * 33)[-1].rpartition("\r")[0])
 
     data_standings = []
+    qualified_status = []
     for data in standings_data:
         k = data.partition(" " * 28)[-1].rpartition("\r")[0]
-        if k in ['     (qualified)', '']:
+        if k in ['']:
             pass
+        elif k in ['     (qualified)']:
+            q = ' (q)'
+            qualified_status.append(q)
         else:
-            data_standings.append(data.partition(" " * 28)[-1].rpartition("\r")[0])
+            data_standings.append(k)
 
     teams_performance_ = {}
     for i, team in enumerate(teams_standings):
+
         if team in teams_performance_:
             teams_performance_[team] = team
         else:
             special_str = ''
             for j in range(5 * i, 5 * i + 5):
                 special_str += '  ' + data_standings[j]
-            teams_performance_[team] = [i, special_str]
+            if len(qualified_status) - i > 0:
+                teams_performance_[team + qualified_status[i]] = [i, special_str]
+            else:
+                teams_performance_[team] = [i, special_str]
+
     teams_performance = OrderedDict(sorted(teams_performance_.items(), key=lambda t: t[1]))
-    return [teams_performance, round]
+    return [teams_performance, round_num]
 
 
 class AnotherLabel(Label):
