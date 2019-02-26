@@ -3,17 +3,15 @@ from kivy.uix.label import Label
 from kivy.graphics import Color
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
-from kivy.uix.button import Button
 from kivy.graphics.vertex_instructions import RoundedRectangle
 from kivy.core.window import Window
-from kivy.app import App
 from kivy.metrics import Metrics
 
-x = Window.system_size[0]
-y = Window.system_size[1]
+scr_w = Window.system_size[0]
+scr_h = Window.system_size[1]
 
 factor1 = Metrics.dpi * .40004
-offset = (x / 2 - 2 * factor1) / 3
+offset = (scr_w / 2 - 2 * factor1) / 3
 a = factor1 + factor1 / 2
 
 
@@ -44,51 +42,28 @@ class ExitPopup(Popup):
         layout = FloatLayout()
 
         self.content = layout
-        self.size_hint = [.8, .4]
+        self.size_hint = [.9, .35]
         self.pos_hint = {'center_x': .5, 'center_y': .5}
         self.title = 'Message'
-        self.background = "atlas://data/images/defaulttheme/textinput"
-        self.title_size = "15sp"
+        # self.background = "atlas://data/images/defaulttheme/textinput"
+        self.title_size = "17sp"
         self.title_font = "Roboto-Regular"
         self.title_color = (.2, .6, .8, 1)
         self.separator_color = (.2, .6, .8, 1)  # [51 / 255, 153 / 255, 204 / 255, 1.0]
         self.auto_dismiss = False
 
-        message = Label(text='Exit EuroLeagueStats?', font_size="15sp",
+        message = Label(text='EuroLeagueStats will close!', font_size="17sp",
                         color=(1, .4, 0, 1),
                         size_hint=[1, .2],
-                        pos_hint={'x': 0, 'y': .58},
+                        pos_hint={'center_x': .5, 'center_y': .55},
                         halign="center",
                         valign="middle")
 
         message.bind(width=lambda *x: message.setter("text_size")(message, (message.width, None)),
                      texture_size=lambda *x: message.setter("height")(message, message.texture_size[1]))
 
-        btn_exit = Button(text='Exit', size_hint=[.4, .25], pos_hint={'x': 0, 'y': .1}, font_size="14sp",
-                          halign="center",
-                          valign="middle",
-                          background_color=(1, 0, 0, 1))
-
-        btn_exit.bind(on_press=self.exit_app,
-                      width=lambda *x: btn_exit.setter("text_size")(btn_exit, (btn_exit.width, None)))
-
-        btn_cancel_exit = Button(on_press=self.cancel_exit, text='Cancel', size_hint=[.4, .25],
-                                 pos_hint={'x': .6, 'y': .1},
-                                 font_size="14sp", halign="center", valign="middle", background_color=(1, 1, 1, 1))
-
-        btn_cancel_exit.bind(
-            width=lambda *x: btn_cancel_exit.setter("text_size")(btn_cancel_exit, (btn_cancel_exit.width, None)))
-
-        for w in [message, btn_exit, btn_cancel_exit]:
+        for w in [message]:
             layout.add_widget(w)
-
-    @staticmethod
-    def exit_app(*args):
-        App.get_running_app().stop()
-        Window.close()
-
-    def cancel_exit(self, *args):
-        self.dismiss()
 
 
 class ToolTipTextUp(Label):
@@ -98,9 +73,9 @@ class ToolTipTextUp(Label):
 
         self.font_size = "14sp"
         self.color = (1, .4, 0, .9)
-        self.width = x - 2 * offset
+        self.width = scr_w - 2 * offset
         self.height = '30dp'
-        self.pos = (offset, y - a - .75 * a / 1.2)  # y - 2.5 * a - factor1 - (factor1 / 3)
+        self.pos = (offset, scr_h - a - .75 * a / 1.2)  # y - 2.5 * a - factor1 - (factor1 / 3)
         # self.halign = "center"
         # self.valign = "middle"
 
@@ -125,7 +100,7 @@ class ToolTipTextDown(Label):
 
         self.font_size = "14sp"
         self.color = (1, .4, 0, .9)
-        self.width = x - 2 * offset
+        self.width = scr_w - 2 * offset
         self.height = '30dp'
         self.pos = (offset, .75 * a / 3.5 + a)
         # self.halign = "center"
