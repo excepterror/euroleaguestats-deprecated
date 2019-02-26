@@ -134,9 +134,9 @@ class RVMod(RecycleView):
 
         a = access_per_game_stats(self.tree, self.name)
         self.data_rs = [{'text': "Round " + str(num) + ":" + " " + str(opp)} for opp, num in
-                        a[0].iteritems()]
-        self.data_po = [{'text': str(opp)} for opp, num in a[1].iteritems()]
-        self.data_ff = [{'text': str(opp)} for opp, num in a[2].iteritems()]
+                        a[0].items()]
+        self.data_po = [{'text': str(opp)} for opp, num in a[1].items()]
+        self.data_ff = [{'text': str(opp)} for opp, num in a[2].items()]
         self.data = self.data_rs + self.data_po + self.data_ff
         # self.opp = opponents_dict
         self.games_stats_rs = a[3]
