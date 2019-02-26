@@ -14,7 +14,7 @@ class AnotherSpecialButton(ButtonBehavior, Label):
 
     def __init__(self, **kwargs):
         super(AnotherSpecialButton, self).__init__(**kwargs)
-        self.font_size = "19sp"
+        self.font_size = "21sp"
         self.color = [1, 1, 1, 1]
         self.halign = "center"
         self.valign = "middle"
@@ -34,14 +34,14 @@ class ASpecialButton(Label):
 
     def __init__(self, **kwargs):
         super(ASpecialButton, self).__init__(**kwargs)
-        self.font_size = "14sp"
-        self.color = [1, .4, 0, 0]  # It doesn't really matter what you enter here as long as alpha=0.
+        self.font_size = "21sp"
+        self.color = [1, .2, 0, .9]  # It doesn't really matter what you enter here as long as alpha=0.
         self.halign = "center"
         self.valign = "middle"
 
         with self.canvas.before:
             Color(1, 1, 1, 1, mode='rgba')
-            self.rect = RoundedRectangle(pos=self.pos, size=self.size, segments=40, radius=[6, ])
+            self.rect = RoundedRectangle(pos=self.pos, size=self.size, segments=40, radius=[17, ])
         self.bind(size=self.update_rect)
 
     def update_rect(self, *args):
