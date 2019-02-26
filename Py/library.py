@@ -2,7 +2,7 @@ import requests
 
 from collections import OrderedDict
 from lxml import etree
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 
 def urls_teams():
@@ -16,7 +16,7 @@ def urls_teams():
                    'Zalgiris Kaunas': [16]}
     teams = []
     teams_codes_n = OrderedDict(sorted(teams_codes.items(), key=lambda t: t[1]))
-    for k, v in teams_codes_n.iteritems():
+    for k, v in teams_codes_n.items():
         teams.append(k)
     return [teams, teams_codes_n]
 
@@ -75,7 +75,7 @@ def get_opponents_dict_on_press(roster_n, player_name):
     # PURPOSE: Checks link for a chosen player. If valid, the player's name and tree are returned.
     # Called by :meth: 'access_bio' - library2.py.
     link = None
-    for name, url in roster_n.iteritems():
+    for name, url in roster_n.items():
         if name == player_name:
             link = url[1]  # 'http://www.euroleague.net/competition/players/showplayer?pcode=004418&seasoncode=E2017'
             # player_name = name
