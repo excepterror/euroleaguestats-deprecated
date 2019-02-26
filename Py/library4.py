@@ -47,4 +47,4 @@ class RV(RecycleView):
         self.bar_width = factor5
         self.data = [{'text': '[b]' + str(stat_category.upper()) + '[/b]' + "   " + str(data_element)} for
                      stat_category, data_element in
-                     stat_dict.iteritems()]
+                     stat_dict.items()]
