@@ -298,8 +298,8 @@ class DraggableLogo(DragBehavior, Widget):
             self.logo.opacity = .5
 
             # Code to show tooltip text with chosen team's name on touch down event.
-            teams_up = urls_teams()[0][:8]
-            teams_down = urls_teams()[0][8:16]
+            teams_up = urls_teams()[0][:9]
+            teams_down = urls_teams()[0][9:18]
 
             image_name = self.logo.source.rpartition('.')[0]
 
@@ -330,23 +330,25 @@ class DraggableLogo(DragBehavior, Widget):
         self.logo.opacity = 1
         self.im.opacity = 0
 
-        pos_init_dict = {'Anadolu Efes Istanbul.png': [offset, scr_h - a],
-                         'AX Armani Exchange Olimpia Milan.png': [factor1 + 2 * offset, scr_h - a],
-                         'Buducnost VOLI Podgorica.png': [scr_w - 2 * factor1 - 2 * offset, scr_h - a],
-                         'CSKA Moscow.png': [scr_w - offset - factor1, scr_h - a],
-                         'Darussafaka Tekfen Istanbul.png': [offset, scr_h - 2.5 * a],
+        pos_init_dict = {'Alba Berlin.png': [offset, scr_h - a],
+                         'Anadolu Efes Istanbul.png': [factor1 + 2 * offset, scr_h - a],
+                         'AX Armani Exchange Olimpia Milan.png': [scr_w - 2 * factor1 - 2 * offset, scr_h - a],
+                         'Crvena Zvezda MTS Belgrade.png': [scr_w - offset - factor1, scr_h - a],
+                         'CSKA Moscow.png': [offset, scr_h - 2.5 * a],
                          'FC Barcelona Lassa.png': [factor1 + 2 * offset, scr_h - 2.5 * a],
                          'FC Bayern Munich.png': [scr_w - 2 * factor1 - 2 * offset, scr_h - 2.5 * a],
                          'Fenerbahce Beko Istanbul.png': [scr_w - offset - factor1, scr_h - 2.5 * a],
-                         'Herbalife Gran Canaria.png': [offset, 1.5 * a + factor1 / 2],
-                         'Khimki Moscow Region.png': [factor1 + 2 * offset, 1.5 * a + factor1 / 2],
-                         'KIROLBET Baskonia Vitoria Gasteiz.png': [scr_w - 2 * factor1 - 2 * offset,
-                                                                   1.5 * a + factor1 / 2],
-                         'Maccabi FOX Tel Aviv.png': [scr_w - offset - factor1, 1.5 * a + factor1 / 2],
-                         'Olympiacos Piraeus.png': [offset, c],
-                         'Panathinaikos OPAP Athens.png': [factor1 + 2 * offset, c],
-                         'Real Madrid.png': [scr_w - 2 * factor1 - 2 * offset, c],
-                         'Zalgiris Kaunas.png': [scr_w - offset - factor1, c]}
+                         'Khimki Moscow Region.png': [offset, scr_h / 2 - factor1 / 2],
+                         'KIROLBET Baskonia Vitoria Gasteiz.png': [scr_w - offset - factor1, scr_h / 2 - factor1 / 2],
+                         'LDLC ASVEL Villeurbanne.png': [offset, 1.5 * a + factor1 / 2],
+                         'Maccabi FOX Tel Aviv.png': [factor1 + 2 * offset, 1.5 * a + factor1 / 2],
+                         'Olympiacos Piraeus.png': [scr_w - 2 * factor1 - 2 * offset,
+                                                    1.5 * a + factor1 / 2],
+                         'Panathinaikos OPAP Athens.png': [scr_w - offset - factor1, 1.5 * a + factor1 / 2],
+                         'Real Madrid.png': [offset, c],
+                         'Valencia Basket.png': [factor1 + 2 * offset, c],
+                         'Zalgiris Kaunas.png': [scr_w - 2 * factor1 - 2 * offset, c],
+                         'Zenit St Petersburg.png': [scr_w - offset - factor1, c]}
 
         Animation.stop_all(self)
 
@@ -394,26 +396,26 @@ class Teams(Screen):
             self.centered_circle = Line(width=factor4 / 2.6).circle = (
                 scr_w / 2., scr_h / 2., factor3, 0, 360, 60)
 
-            self.centered_line_l = Line(width=factor4 / 2.5, points=[0, scr_h / 2, scr_w / 2 - factor3, scr_h / 2])
-            self.centered_line_r = Line(width=factor4 / 2.5, points=[scr_w, scr_h / 2, scr_w / 2 + factor3, scr_h / 2])
+            # self.centered_line_l = Line(width=factor4 / 2.5, points=[0, scr_h / 2, scr_w / 2 - factor3, scr_h / 2])
+            # self.centered_line_r = Line(width=factor4 / 2.5, points=[scr_w, scr_h / 2, scr_w / 2 + factor3, scr_h / 2])
             self.vertical_l = Line(width=factor4, points=[0, 0, 0, scr_h])
             self.vertical_r = Line(width=factor4, points=[scr_w, 0, scr_w, scr_h])
             self.horizontal_top = Line(width=factor4, points=[0, scr_h, scr_w, scr_h])
             self.horizontal_bottom = Line(width=factor4, points=[0, 0, scr_w, 0])
 
-        DraggableLogo.emblem = 'Anadolu Efes Istanbul.png'
+        DraggableLogo.emblem = 'Alba Berlin.png'
         self.add_widget(DraggableLogo(pos=[offset, scr_h - a]))
 
-        DraggableLogo.emblem = 'AX Armani Exchange Olimpia Milan.png'
+        DraggableLogo.emblem = 'Anadolu Efes Istanbul.png'
         self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, scr_h - a]))
 
-        DraggableLogo.emblem = 'Buducnost VOLI Podgorica.png'
+        DraggableLogo.emblem = 'AX Armani Exchange Olimpia Milan.png'
         self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, scr_h - a]))
 
-        DraggableLogo.emblem = 'CSKA Moscow.png'
+        DraggableLogo.emblem = 'Crvena Zvezda MTS Belgrade.png'
         self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, scr_h - a]))
 
-        DraggableLogo.emblem = 'Darussafaka Tekfen Istanbul.png'
+        DraggableLogo.emblem = 'CSKA Moscow.png'
         self.add_widget(DraggableLogo(pos=[offset, scr_h - 2.5 * a]))
 
         DraggableLogo.emblem = 'FC Barcelona Lassa.png'
@@ -425,28 +427,34 @@ class Teams(Screen):
         DraggableLogo.emblem = 'Fenerbahce Beko Istanbul.png'
         self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, scr_h - 2.5 * a]))
 
-        DraggableLogo.emblem = 'Herbalife Gran Canaria.png'
-        self.add_widget(DraggableLogo(pos=[offset, 1.5 * a + factor1 / 2]))
-
         DraggableLogo.emblem = 'Khimki Moscow Region.png'
-        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, 1.5 * a + factor1 / 2]))
+        self.add_widget(DraggableLogo(pos=[offset, scr_h / 2 - factor1 / 2]))
 
         DraggableLogo.emblem = 'KIROLBET Baskonia Vitoria Gasteiz.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, 1.5 * a + factor1 / 2]))
+        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, scr_h / 2 - factor1 / 2]))
+
+        DraggableLogo.emblem = 'LDLC ASVEL Villeurbanne.png'
+        self.add_widget(DraggableLogo(pos=[offset, 1.5 * a + factor1 / 2]))
 
         DraggableLogo.emblem = 'Maccabi FOX Tel Aviv.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, 1.5 * a + factor1 / 2]))
+        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, 1.5 * a + factor1 / 2]))
 
         DraggableLogo.emblem = 'Olympiacos Piraeus.png'
-        self.add_widget(DraggableLogo(pos=[offset, c]))
+        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, 1.5 * a + factor1 / 2]))
 
         DraggableLogo.emblem = 'Panathinaikos OPAP Athens.png'
-        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, c]))
+        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, 1.5 * a + factor1 / 2]))
 
         DraggableLogo.emblem = 'Real Madrid.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, c]))
+        self.add_widget(DraggableLogo(pos=[offset, c]))
+
+        DraggableLogo.emblem = 'Valencia Basket.png'
+        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, c]))
 
         DraggableLogo.emblem = 'Zalgiris Kaunas.png'
+        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, c]))
+
+        DraggableLogo.emblem = 'Zenit St Petersburg.png'
         self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, c]))
 
     def on_enter(self, *args):
@@ -501,12 +509,9 @@ class ChangeLogScreen(Screen):
     Changelog Screen Setup
     """
     log_text_1 = StringProperty(
-        '\n[u]' + 'ELS v1.2.9 - Current Release' + '[/u]'
-        + "\n\n> Add index '(q)' for teams that are qualified for the Play-Offs"
-        + '\n\n> Add detection of network absence or connection error. Notify the user'
-        + '\n\n> Try to make the application exit more efficiently'
-        + '\n\n> Rework Home Screen'
-        + '\n\n> Various code improvements and bug fixes')
+        '\n[u]' + 'ELS v1.3.3 64-bit - Current Release' + '[/u]'
+        + '\n\n> Update for Season 2019-20'
+        + '\n\n> Other improvements')
 
     def __init__(self, **kwargs):
         super(ChangeLogScreen, self).__init__(**kwargs)
