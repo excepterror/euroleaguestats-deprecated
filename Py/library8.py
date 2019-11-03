@@ -8,7 +8,7 @@ from kivy.graphics import Color, RoundedRectangle
 
 def get_standings():
     # Used in :meth: callback_to_sc1b - main.py.
-    url = "https://www.euroleague.net/main/standings?seasoncode=E2018"
+    url = "https://www.euroleague.net/main/standings?seasoncode=E2019"
     response = requests.get(url)
     tree = etree.HTML(response.content)
 
@@ -18,13 +18,13 @@ def get_standings():
 
     standings_teams = tree.xpath(
         "//div[@id='wrap']//div[@id='container']//div[@id='main-one']"
-        "//div[@class='PhaseGroupStandingsMainContainer eu-RS-E2018 eu-RS-E']"
+        "//div[@class='PhaseGroupStandingsMainContainer eu-RS-E2019 eu-RS-E']"
         "//table[@class='table responsive fixed-cols-1 table-left-cols-1 table-expand table-striped table-hover table-"
         "noborder table-centered table-condensed']/tbody/tr//td[@class='eu-game-info-grid-main-column']/a/text()")
 
     standings_data = tree.xpath(
         "//div[@id='wrap']//div[@id='container']//div[@id='main-one']"
-        "//div[@class='PhaseGroupStandingsMainContainer eu-RS-E2018 eu-RS-E']"
+        "//div[@class='PhaseGroupStandingsMainContainer eu-RS-E2019 eu-RS-E']"
         "//table[@class='table responsive fixed-cols-1 table-left-cols-1 table-expand table-striped table-hover table-"
         "noborder table-centered table-condensed']/tbody/tr/td/text()")
 

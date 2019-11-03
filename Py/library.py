@@ -7,13 +7,13 @@ from urllib.parse import urljoin
 
 def urls_teams():
     # PURPOSE: Returns the names of the teams and the dictionary. Called in 'Class' DraggableLogo - main.py.
-    teams_codes = {'Anadolu Efes Istanbul': [1], 'AX Armani Exchange Olimpia Milan': [2],
-                   'Buducnost VOLI Podgorica': [3], 'CSKA Moscow': [4], 'Darussafaka Tekfen Istanbul': [5],
+    teams_codes = {'Alba Berlin': [1], 'Anadolu Efes Istanbul': [2],
+                   'AX Armani Exchange Olimpia Milan': [3], 'Crvena Zvezda MTS Belgrade': [4], 'CSKA Moscow': [5],
                    'FC Barcelona Lassa': [6], 'FC Bayern Munich': [7], 'Fenerbahce Beko Istanbul': [8],
-                   'Herbalife Gran Canaria': [9], 'Khimki Moscow Region': [10],
-                   'KIROLBET Baskonia Vitoria Gasteiz': [11], 'Maccabi FOX Tel Aviv': [12],
+                   'Khimki Moscow Region': [9], 'KIROLBET Baskonia Vitoria Gasteiz': [10],
+                   'LDLC ASVEL Villeurbanne': [11], 'Maccabi FOX Tel Aviv': [12],
                    'Olympiacos Piraeus': [13], 'Panathinaikos OPAP Athens': [14], 'Real Madrid': [15],
-                   'Zalgiris Kaunas': [16]}
+                   'Valencia Basket': [16], 'Zalgiris Kaunas': [17], 'Zenit St Petersburg': [18]}
     teams = []
     teams_codes_n = OrderedDict(sorted(teams_codes.items(), key=lambda t: t[1]))
     for k, v in teams_codes_n.items():
@@ -60,13 +60,13 @@ def check_opponents(t):
     # PURPOSE: Creates 3 dicts with all teams the player played against in Regular Season, Play-Offs & Finals.
     # Called by :meth: 'access_per_game_stats' - library5.py.
     rivals_rs = t.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_RS']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2019_RS']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
     rivals_po = t.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_PO']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2019_PO']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
     rivals_ff = t.xpath(
-        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2018_FF']//"
+        "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2019_FF']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
     return [rivals_rs, rivals_po, rivals_ff]
 
