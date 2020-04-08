@@ -68,7 +68,7 @@ class AnotherLabel(Label):
     # Used in Class 'Standings' & 'GameStats'- main.py.
     def __init__(self, **kwargs):
         super(AnotherLabel, self).__init__(**kwargs)
-        # self.font_size = "14sp"
+ 
         self.size_hint = [.94, .065]
         self.pos_hint = {'center_x': .5, 'y': .90}
         self.color = (1, 1, 1, 1)  # (1, .4, 0, 1)

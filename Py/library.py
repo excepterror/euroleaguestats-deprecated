@@ -77,11 +77,9 @@ def get_opponents_dict_on_press(roster_n, player_name):
     link = None
     for name, url in roster_n.items():
         if name == player_name:
-            link = url[1]  # 'http://www.euroleague.net/competition/players/showplayer?pcode=004418&seasoncode=E2017'
-            # player_name = name
+            link = url[1]
     if link is not None:
         t = get_tree(link)
         y = [t, player_name]
         return y
-    return  # A valid link should always apply here otherwise the app will crash. Work could be done here,
-    # but I can think of no reason why the link would be non-existent or sthg. Unless the site is screwed.
+    return

@@ -45,7 +45,6 @@ class ExitPopup(Popup):
         self.size_hint = [.9, .35]
         self.pos_hint = {'center_x': .5, 'center_y': .5}
         self.title = 'Message'
-        # self.background = "atlas://data/images/defaulttheme/textinput"
         self.title_size = "17sp"
         self.title_font = "Roboto-Regular"
         self.title_color = (.2, .6, .8, 1)
@@ -75,14 +74,8 @@ class ToolTipTextUp(Label):
         self.color = (1, .4, 0, .9)
         self.width = scr_w - 2 * offset
         self.height = '30dp'
-        self.pos = (offset, scr_h - a - .75 * a / 1.2)  # y - 2.5 * a - factor1 - (factor1 / 3)
-        # self.halign = "center"
-        # self.valign = "middle"
-
-        '''self.bind(
-            width=lambda *x: self.setter("text_size")(self, (self.width, None)),
-            texture_size=lambda *x: self.setter("height")(self, self.texture_size[1]))'''
-
+        self.pos = (offset, scr_h - a - .75 * a / 1.2)
+     
         with self.canvas.before:
             Color(1, 1, 1, .6, mode='rgba')
             self.rect = RoundedRectangle(pos=self.pos, size=self.size, segments=40, radius=[10, ])
@@ -103,12 +96,6 @@ class ToolTipTextDown(Label):
         self.width = scr_w - 2 * offset
         self.height = '30dp'
         self.pos = (offset, .75 * a / 3.5 + a)
-        # self.halign = "center"
-        # self.valign = "middle"
-
-        '''self.bind(
-            width=lambda *x: self.setter("text_size")(self, (self.width, None)),
-            texture_size=lambda *x: self.setter("height")(self, self.texture_size[1]))'''
 
         with self.canvas.before:
             Color(1, 1, 1, .6, mode='rgba')
@@ -124,13 +111,11 @@ class MyOtherLabel(Label):
     # Used in Class 'Roster' & 'Options' - main.py.
     def __init__(self, **kwargs):
         super(MyOtherLabel, self).__init__(**kwargs)
-        # self.font_size = "14sp"
         self.size_hint = [.94, .066]
         self.pos_hint = {'center_x': .5, 'y': .90}
         self.color = (1, 1, 1, 1)
         self.halign = "center"
         self.valign = "middle"
-        # self.markup = True
 
         with self.canvas.before:
             Color(0, .6, .6, 1, mode='rgba')

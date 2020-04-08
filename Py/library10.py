@@ -48,14 +48,9 @@ def check_network_availability():
 def is_connected(hostname):
     # Called by :cls: 'Standings' - main.py.
     try:
-        # see if we can resolve the host name -- tells us if there is
-        # a DNS listening
         host = socket.gethostbyname(hostname)
-        # connect to the host -- tells us if the host is actually
-        # reachable -- Port: 80 = HTTP, 53 = DNS, 10 sec = timeout
-        # :meth: gethostbyname returns an IPv4 address (numeric)
         s = socket.create_connection((host, 80), 10)
-        s.shutdown(2)  # 2 = SHUT_RDWR
+        s.shutdown(2) 
         s.close()
         return True
     except OSError:
@@ -95,7 +90,6 @@ class ConnWarnPopup(Popup):
         self.title_color = [.2, .6, .8, 1]
         self.title_font = "Roboto-Regular"
         self.separator_color = [.2, .6, .8, 1]
-        # self.background = "atlas://data/images/defaulttheme/textinput"
         self.size_hint = [.9, .35]
         self.pos_hint = {'center_x': .5, 'center_y': .5}
         self.auto_dismiss = True
