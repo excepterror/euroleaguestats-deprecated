@@ -122,7 +122,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
 
 class RVMod(RecycleView):
     # The RecycleView Widget. Used for presenting stats by game.
-    def __init__(self, **kwargs):
+    def __init__(self, _tree, name, **kwargs):
         super(RVMod, self).__init__(**kwargs)
         self.viewclass = 'SelectableLabel'
         self.size_hint = [.95, .85]
@@ -131,14 +131,16 @@ class RVMod(RecycleView):
         self.bar_width = factor5
         self.bar_margin = -factor6
         self.bar_color = (1, .4, 0, 1)
+		self.tree = _tree
+        self.name = name
 
-        a = access_per_game_stats(self.tree, self.name)
+        a = access_per_game_stats(_tree, name)
         self.data_rs = [{'text': "Round " + str(num) + ":" + " " + str(opp)} for opp, num in
                         a[0].items()]
         self.data_po = [{'text': str(opp)} for opp, num in a[1].items()]
         self.data_ff = [{'text': str(opp)} for opp, num in a[2].items()]
         self.data = self.data_rs + self.data_po + self.data_ff
-        # self.opp = opponents_dict
+       
         self.games_stats_rs = a[3]
         self.games_stats_po = a[4]
         self.games_stats_ff = a[5]
