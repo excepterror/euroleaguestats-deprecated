@@ -16,7 +16,6 @@ a = factor1 + factor1 / 2
 
 
 class MyLabel(ButtonBehavior, Label):
-    # Used in Class 'Options' for button customisation - main.py.
     def __init__(self, **kwargs):
         super(MyLabel, self).__init__(**kwargs)
         self.font_size = "17sp"
@@ -35,7 +34,7 @@ class MyLabel(ButtonBehavior, Label):
 
 
 class ExitPopup(Popup):
-    # PURPOSE: Exit options Popup. Called by :cls: 'MyScreenManager' - main.py.
+    # PURPOSE: Exit options Popup.
     def __init__(self, **kwargs):
         super(ExitPopup, self).__init__(**kwargs)
 
@@ -66,7 +65,6 @@ class ExitPopup(Popup):
 
 
 class ToolTipTextUp(Label):
-    # PURPOSE: Called by :meth: __init__ & on_touch_down in Class 'DraggableLogo' - main.py.
     def __init__(self, **kwargs):
         super(ToolTipTextUp, self).__init__(**kwargs)
 
@@ -87,7 +85,6 @@ class ToolTipTextUp(Label):
 
 
 class ToolTipTextDown(Label):
-    # PURPOSE: Called by :meth: __init__ & on_touch_down in Class 'DraggableLogo' - main.py.
     def __init__(self, **kwargs):
         super(ToolTipTextDown, self).__init__(**kwargs)
 

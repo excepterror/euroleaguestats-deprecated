@@ -4,8 +4,7 @@ from kivy.uix.button import Button, ButtonBehavior
 
 
 ########################################################################################################################
-# The following two Classes are called in Class 'Standings'. Used for the customisation of 'buttons' 'Enter' &
-# 'Standings' - main.py.
+# The following two Classes are used for the customisation of 'buttons' 'Enter' & 'Standings'.
 ########################################################################################################################
 
 
@@ -50,7 +49,6 @@ class ASpecialButton(Label):
 
 
 class PlayerButton(Button):
-    # Used in Class 'Roster' - main.py.
     def __init__(self, **kwargs):
         super(PlayerButton, self).__init__(**kwargs)
         self.font_size = "16sp"

@@ -7,7 +7,6 @@ from kivy.graphics import Color, RoundedRectangle
 
 
 def get_standings():
-    # Used in :meth: callback_to_sc1b - main.py.
     url = "https://www.euroleague.net/main/standings?seasoncode=E2019"
     response = requests.get(url)
     tree = etree.HTML(response.content)
@@ -65,7 +64,6 @@ def get_standings():
 
 
 class AnotherLabel(Label):
-    # Used in Class 'Standings' & 'GameStats'- main.py.
     def __init__(self, **kwargs):
         super(AnotherLabel, self).__init__(**kwargs)
  

@@ -58,7 +58,6 @@ def get_tree(link):
 
 def check_opponents(t):
     # PURPOSE: Creates 3 dicts with all teams the player played against in Regular Season, Play-Offs & Finals.
-    # Called by :meth: 'access_per_game_stats' - library5.py.
     rivals_rs = t.xpath(
         "//div[@class='PlayerPhasesStatisticsMainContainer']//div[@id='E2019_RS']//"
         "table[@id='tblPlayerPhaseStatistics']/tr/td[@class='RivalContainer']/a/text()")
@@ -73,7 +72,6 @@ def check_opponents(t):
 
 def get_opponents_dict_on_press(roster_n, player_name):
     # PURPOSE: Checks link for a chosen player. If valid, the player's name and tree are returned.
-    # Called by :meth: 'access_bio' - library2.py.
     link = None
     for name, url in roster_n.items():
         if name == player_name:

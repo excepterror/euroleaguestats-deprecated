@@ -46,7 +46,6 @@ def check_network_availability():
 
 
 def is_connected(hostname):
-    # Called by :cls: 'Standings' - main.py.
     try:
         host = socket.gethostbyname(hostname)
         s = socket.create_connection((host, 80), 10)
