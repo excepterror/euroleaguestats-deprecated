@@ -45,7 +45,6 @@ c: 22.5 for my laptop screen, dpi=99.8892
 '''
 
 factor1 = round(Metrics.dpi * .40044, 0)
-# factor2 = round(Metrics.dpi * .70077, 0)
 factor3 = round(Metrics.dpi * .30033, 0)
 factor4 = round(Metrics.dpi * .03003, 0)
 factor5 = round(Metrics.dpi * .02002, 0)
@@ -62,7 +61,7 @@ class GameStats(Screen):
     Stats by Game Screen Setup
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, _tree, his_name, **kwargs):
         super(GameStats, self).__init__(**kwargs)
         self.name = 'game_stats'
 
@@ -75,17 +74,14 @@ class GameStats(Screen):
             self.horizontal_top = Line(width=factor4, points=[0, scr_h, scr_w, scr_h])
             self.horizontal_bottom = Line(width=factor4, points=[0, 0, scr_w, 0])
 
-        label = AnotherLabel(text='Games played by ' + self.player_name, font_size='17sp')
-        recycle_viewer = RVMod()
+        label = AnotherLabel(text='Games played by ' + str(his_name), font_size='17sp')
+        recycle_viewer = RVMod(_tree, his_name)
 
-        self.add_widget(label)
-        self.add_widget(recycle_viewer)
+        for w in [label, recycle_viewer]:
+            self.add_widget(w)
 
     def on_enter(self, *args):
-        if 'GameStats()' in screens_used:
-            pass
-        else:
-            screens_used.append('GameStats()')
+        check_in_names(screen_name='game_stats')
 
 
 class Options(Screen):
@@ -93,7 +89,7 @@ class Options(Screen):
     Options & Player Info Screen Setup
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, _tree, player_name, num, position, height, date, nationality, filename, **kwargs):
         super(Options, self).__init__(**kwargs)
         self.name = 'options'
 
@@ -106,18 +102,18 @@ class Options(Screen):
             self.horizontal_top = Line(width=factor4, points=[0, scr_h, scr_w, scr_h])
             self.horizontal_bottom = Line(width=factor4, points=[0, 0, scr_w, 0])
 
-        ph = Image(source=self.filename, allow_stretch=True, keep_ratio=False, size_hint=[None, .18],
+        ph = Image(source=filename, allow_stretch=True, keep_ratio=False, size_hint=[None, .18],
                    width='210dp',
                    pos_hint={'center_x': .5, 'y': .67})
 
-        pl_name = MyOtherLabel(text=self.player_name, font_size='17sp')
+        pl_name = MyOtherLabel(text=player_name, font_size='17sp')
 
-        num_pos = Label(text=str(self.num) + " | " + str(self.position), color=[0, 0, 0, 1], font_size='17sp',
+        num_pos = Label(text=str(num) + " | " + str(position), color=[0, 0, 0, 1], font_size='17sp',
                         size_hint=[1, None], halign="center", valign="middle")
         num_pos.bind(width=lambda *x: num_pos.setter("text_size")(num_pos, (num_pos.width, None)),
                      texture_size=lambda *x: num_pos.setter("height")(num_pos, num_pos.texture_size[1]))
 
-        bio = Label(text=str(self.height_) + " | " + str(self.date) + " | " + str(self.nationality), color=[0, 0, 0, 1],
+        bio = Label(text=str(height) + " | " + str(date) + " | " + str(nationality), color=[0, 0, 0, 1],
                     font_size='17sp', size_hint=[1, None], halign="center", valign="center")
         bio.bind(width=lambda *x: bio.setter("text_size")(bio, (bio.width, None)),
                  texture_size=lambda *x: bio.setter("height")(bio, bio.texture_size[1]))
@@ -130,12 +126,12 @@ class Options(Screen):
                          texture_size=lambda *x: btn_for_all.setter("height")(btn_for_all, btn_for_all.texture_size[1]))
 
         btn_for_av = MyLabel(text="Average Stats", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .23})
-        btn_for_av.bind(on_release=lambda *x: self.access_average_stats(),
+        btn_for_av.bind(on_release=lambda *x: self.access_average_stats(player_name, tree),
                         width=lambda *x: btn_for_av.setter("text_size")(btn_for_av, (btn_for_av.width, None)),
                         texture_size=lambda *x: btn_for_av.setter("height")(btn_for_av, btn_for_av.texture_size[1]))
 
         btn_for_tot = MyLabel(text="Total Stats", size_hint=[.7, .1], pos_hint={'center_x': .5, 'y': .09})
-        btn_for_tot.bind(on_release=lambda x: self.access_total_stats(),
+        btn_for_tot.bind(on_release=lambda x: self.access_total_stats(player_name, tree),
                          width=lambda *x: btn_for_tot.setter("text_size")(btn_for_tot, (btn_for_tot.width, None)),
                          texture_size=lambda *x: btn_for_tot.setter("height")(btn_for_tot, btn_for_tot.texture_size[1]))
 
@@ -145,8 +141,9 @@ class Options(Screen):
         for w in [pl_name, ph, btn_for_all, btn_for_av, btn_for_tot, grid1]:
             self.add_widget(w)
 
-    def access_average_stats(self):
-        av_stats_list = get_aver_stats(self.t)
+    @staticmethod
+    def access_average_stats(player_name, _tree):
+        av_stats_list = get_aver_stats(_tree)
         v = stability_check(av_stats_list)
         if v is None:
             pass
@@ -156,13 +153,14 @@ class Options(Screen):
             display_data_popup = Popup(content=rv_view, size_hint=[.9, .9],
                                        separator_color=(1, .4, 0, 1),  # [255 / 255, 102 / 255, 0 / 255, 1.0],
                                        background="atlas://data/images/defaulttheme/textinput",
-                                       title="Average Stats for " + self.player_name, title_align="center",
+                                       title="Average Stats for " + player_name, title_align="center",
                                        title_size="16sp",
                                        title_font="Roboto-Regular", title_color=[.2, .6, .8, 1], auto_dismiss=True)
             display_data_popup.open()
 
-    def access_total_stats(self):
-        tot_stats_list = get_total_stats(self.t)
+    @staticmethod
+    def access_total_stats(player_name, _tree):
+        tot_stats_list = get_total_stats(_tree)
         v = stability_check(tot_stats_list)
         if v is None:
             pass
@@ -172,7 +170,7 @@ class Options(Screen):
             display_data_popup = Popup(content=rv_view, size_hint=[.9, .9],
                                        separator_color=(1, .4, 0, 1),  # [255 / 255, 102 / 255, 0 / 255, 1.0],
                                        background="atlas://data/images/defaulttheme/textinput",
-                                       title="Total Stats for " + self.player_name, title_align="center",
+                                       title="Total Stats for " + player_name, title_align="center",
                                        title_size="16sp",
                                        title_font="Roboto-Regular", title_color=[.2, .6, .8, 1], auto_dismiss=True)
             display_data_popup.open()
@@ -182,10 +180,7 @@ class Options(Screen):
         self.rect.pos = self.pos
 
     def on_enter(self, *args):
-        if 'Options()' in screens_used:
-            pass
-        else:
-            screens_used.append('Options()')
+        check_in_names(screen_name='options')
 
 
 class Roster(Screen):
@@ -193,7 +188,7 @@ class Roster(Screen):
     Roster Screen Setup
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, team_roster, teams_name, **kwargs):
         super(Roster, self).__init__(**kwargs)
         self.name = 'roster'
 
@@ -201,7 +196,7 @@ class Roster(Screen):
         self.pos_hint = {'x': 0, 'y': 0}
         self.add_widget(Image(source='Court.jpg', allow_stretch=True, keep_ratio=False))
 
-        title = MyOtherLabel(text=self.text + ' Roster', font_size='17sp')
+        title = MyOtherLabel(text=teams_name + ' Roster', font_size='17sp')
         self.add_widget(title)
 
         with self.canvas.before:
@@ -223,7 +218,8 @@ class Roster(Screen):
                                        size_hint=[.95, .84],
                                        pos_hint={'center_x': .5, 'y': .03})
 
-        grid = GridLayout(rows=len(self.roster_n), cols=1,
+        # self.text and self.roster_n: from :meth: on_touch_up in :class: Draggable Logo
+        grid = GridLayout(rows=len(team_roster), cols=1,
                           padding=10,
                           size_hint=[1, 1.8],
                           spacing=6)
@@ -232,7 +228,7 @@ class Roster(Screen):
         self.add_widget(scrollable_roster)
 
         # Widgets.
-        for pl_name, url in self.roster_n.items():
+        for pl_name, url in team_roster.items():
             btn_player = PlayerButton(text=str(pl_name))
             btn_player.bind(on_release=callback_to_sc3)
             grid.add_widget(btn_player)
@@ -242,10 +238,7 @@ class Roster(Screen):
         self.rect.pos = self.pos
 
     def on_enter(self, *args):
-        if 'Roster()' in screens_used:
-            pass
-        else:
-            screens_used.append('Roster()')
+        check_in_names(screen_name='roster')
 
 
 class DraggableLogo(DragBehavior, Widget):
@@ -254,15 +247,10 @@ class DraggableLogo(DragBehavior, Widget):
      few images draggable and adds a few effects too!
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, emblem, **kwargs):
         super(DraggableLogo, self).__init__(**kwargs)
-        # self.size = (45, 45)
-        # with self.canvas:
-        # Color(1, 1, 1, 1)
-        # self.my_circle = Ellipse(source=self.emblem, size=self.size, pos=self.pos)  # draggable circle
-        # self.rect = Rectangle(pos=self.pos, size=self.size) # draggable rectangle
 
-        self.logo = Image(source=self.emblem, allow_stretch=True, keep_ratio=False, size_hint=[None, None],
+        self.logo = Image(source=emblem, allow_stretch=True, keep_ratio=False, size_hint=[None, None],
                           width=factor1, height=factor1, pos=self.pos)
         self.add_widget(self.logo)
 
@@ -284,7 +272,6 @@ class DraggableLogo(DragBehavior, Widget):
         self.tooltip_down = ToolTipTextDown()  # ToolTip text feature, see on_touch_down below.
 
     def update_rect(self, *args):
-        # self.rect.size = self.size
         self.logo.pos = self.pos
 
     def on_touch_down(self, touch):
@@ -364,18 +351,17 @@ class DraggableLogo(DragBehavior, Widget):
             # Checking first if the position of the widget (image) is within the bounding circle, then...
 
             image_name = self.logo.source.rpartition('\\')[-1]
-            roster_n = {}
 
             image_name_ = image_name.rpartition('.')[0]
             teams_codes = urls_teams()[1]
             for team, data in teams_codes.items():
+                # data[0] is a number from 1 - 18
                 if team == image_name_:
                     roster = get_players(data[0])
-                    roster_n = OrderedDict(sorted(roster.items(), key=lambda t: t[1]))
+                    global roster_n
+                    roster_n = OrderedDict(sorted(roster.items(), key=lambda t: t[0]))
 
-            Roster.text = image_name_
-            Roster.roster_n = roster_n
-            callback_to_sc2()
+            callback_to_sc2(image_name_)
         return super(DraggableLogo, self).on_touch_up(touch)
 
 
@@ -396,72 +382,57 @@ class Teams(Screen):
             self.centered_circle = Line(width=factor4 / 2.6).circle = (
                 scr_w / 2., scr_h / 2., factor3, 0, 360, 60)
 
-            # self.centered_line_l = Line(width=factor4 / 2.5, points=[0, scr_h / 2, scr_w / 2 - factor3, scr_h / 2])
-            # self.centered_line_r = Line(width=factor4 / 2.5, points=[scr_w, scr_h / 2, scr_w / 2 + factor3, scr_h / 2])
             self.vertical_l = Line(width=factor4, points=[0, 0, 0, scr_h])
             self.vertical_r = Line(width=factor4, points=[scr_w, 0, scr_w, scr_h])
             self.horizontal_top = Line(width=factor4, points=[0, scr_h, scr_w, scr_h])
             self.horizontal_bottom = Line(width=factor4, points=[0, 0, scr_w, 0])
 
-        DraggableLogo.emblem = 'Alba Berlin.png'
-        self.add_widget(DraggableLogo(pos=[offset, scr_h - a]))
+        drag1 = DraggableLogo(pos=[offset, scr_h - a], emblem='Alba Berlin.png')
 
-        DraggableLogo.emblem = 'Anadolu Efes Istanbul.png'
-        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, scr_h - a]))
+        drag2 = DraggableLogo(pos=[factor1 + 2 * offset, scr_h - a], emblem='Anadolu Efes Istanbul.png')
 
-        DraggableLogo.emblem = 'AX Armani Exchange Olimpia Milan.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, scr_h - a]))
+        drag3 = DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, scr_h - a],
+                              emblem='AX Armani Exchange Olimpia Milan.png')
 
-        DraggableLogo.emblem = 'Crvena Zvezda MTS Belgrade.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, scr_h - a]))
+        drag4 = DraggableLogo(pos=[scr_w - offset - factor1, scr_h - a], emblem='Crvena Zvezda MTS Belgrade.png')
+        drag5 = DraggableLogo(pos=[offset, scr_h - 2.5 * a], emblem='CSKA Moscow.png')
 
-        DraggableLogo.emblem = 'CSKA Moscow.png'
-        self.add_widget(DraggableLogo(pos=[offset, scr_h - 2.5 * a]))
+        drag6 = DraggableLogo(pos=[factor1 + 2 * offset, scr_h - 2.5 * a], emblem='FC Barcelona Lassa.png')
 
-        DraggableLogo.emblem = 'FC Barcelona Lassa.png'
-        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, scr_h - 2.5 * a]))
+        drag7 = DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, scr_h - 2.5 * a], emblem='FC Bayern Munich.png')
 
-        DraggableLogo.emblem = 'FC Bayern Munich.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, scr_h - 2.5 * a]))
+        drag8 = DraggableLogo(pos=[scr_w - offset - factor1, scr_h - 2.5 * a], emblem='Fenerbahce Beko Istanbul.png')
 
-        DraggableLogo.emblem = 'Fenerbahce Beko Istanbul.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, scr_h - 2.5 * a]))
+        drag9 = DraggableLogo(pos=[offset, scr_h / 2 - factor1 / 2], emblem='Khimki Moscow Region.png')
 
-        DraggableLogo.emblem = 'Khimki Moscow Region.png'
-        self.add_widget(DraggableLogo(pos=[offset, scr_h / 2 - factor1 / 2]))
+        drag10 = DraggableLogo(pos=[scr_w - offset - factor1, scr_h / 2 - factor1 / 2],
+                               emblem='KIROLBET Baskonia Vitoria Gasteiz.png')
 
-        DraggableLogo.emblem = 'KIROLBET Baskonia Vitoria Gasteiz.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, scr_h / 2 - factor1 / 2]))
+        drag11 = DraggableLogo(pos=[offset, 1.5 * a + factor1 / 2], emblem='LDLC ASVEL Villeurbanne.png')
 
-        DraggableLogo.emblem = 'LDLC ASVEL Villeurbanne.png'
-        self.add_widget(DraggableLogo(pos=[offset, 1.5 * a + factor1 / 2]))
+        drag12 = DraggableLogo(pos=[factor1 + 2 * offset, 1.5 * a + factor1 / 2], emblem='Maccabi FOX Tel Aviv.png')
 
-        DraggableLogo.emblem = 'Maccabi FOX Tel Aviv.png'
-        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, 1.5 * a + factor1 / 2]))
+        drag13 = DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, 1.5 * a + factor1 / 2],
+                               emblem='Olympiacos Piraeus.png')
 
-        DraggableLogo.emblem = 'Olympiacos Piraeus.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, 1.5 * a + factor1 / 2]))
+        drag14 = DraggableLogo(pos=[scr_w - offset - factor1, 1.5 * a + factor1 / 2],
+                               emblem='Panathinaikos OPAP Athens.png')
 
-        DraggableLogo.emblem = 'Panathinaikos OPAP Athens.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, 1.5 * a + factor1 / 2]))
+        drag15 = DraggableLogo(pos=[offset, c], emblem='Real Madrid.png')
 
-        DraggableLogo.emblem = 'Real Madrid.png'
-        self.add_widget(DraggableLogo(pos=[offset, c]))
+        drag16 = DraggableLogo(pos=[factor1 + 2 * offset, c], emblem='Valencia Basket.png')
 
-        DraggableLogo.emblem = 'Valencia Basket.png'
-        self.add_widget(DraggableLogo(pos=[factor1 + 2 * offset, c]))
+        drag17 = DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, c], emblem='Zalgiris Kaunas.png')
 
-        DraggableLogo.emblem = 'Zalgiris Kaunas.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - 2 * factor1 - 2 * offset, c]))
+        drag18 = DraggableLogo(pos=[scr_w - offset - factor1, c], emblem='Zenit St Petersburg.png')
 
-        DraggableLogo.emblem = 'Zenit St Petersburg.png'
-        self.add_widget(DraggableLogo(pos=[scr_w - offset - factor1, c]))
+        drags = [drag1, drag2, drag3, drag4, drag5, drag6, drag7, drag8, drag9, drag10, drag11, drag12, drag13, drag14,
+                 drag15, drag16, drag17, drag18]
+        for drag in drags:
+            self.add_widget(drag)
 
     def on_enter(self, *args):
-        if 'Teams()' in screens_used:
-            pass
-        else:
-            screens_used.append('Teams()')
+        check_in_names(screen_name='teams')
 
 
 class Standings(Screen):
@@ -469,7 +440,7 @@ class Standings(Screen):
     Standings Screen Setup.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self, all_current_teams_standings, info, **kwargs):
         super(Standings, self).__init__(**kwargs)
         self.name = 'standings'
 
@@ -486,11 +457,11 @@ class Standings(Screen):
             self.horizontal_bottom = Line(width=factor4, points=[0, 0, scr_w, 0])
 
         round_info = AnotherLabel(font_size='17sp',
-                                  text='[b]' + self.info[0] + '\n' + '[color=FFFFFF]' + self.info[
+                                  text='[b]' + info[0] + '\n' + '[color=FFFFFF]' + info[
                                       1] + '[/color]' + '[/b]')
         self.add_widget(round_info)
 
-        rv_view = RVSt(self.current_teams_standings)
+        rv_view = RVSt(all_current_teams_standings)
         self.add_widget(rv_view)
 
     def update_rect(self, *args):
@@ -498,10 +469,7 @@ class Standings(Screen):
         # self.rect.pos = self.pos
 
     def on_enter(self, *args):
-        if 'Standings()' in screens_used:
-            pass
-        else:
-            screens_used.append('Standings()')
+        check_in_names(screen_name='standings')
 
 
 class ChangeLogScreen(Screen):
@@ -515,7 +483,7 @@ class ChangeLogScreen(Screen):
 
     def __init__(self, **kwargs):
         super(ChangeLogScreen, self).__init__(**kwargs)
-        self.name = 'changelog'
+        self.name = 'change_log'
 
         with self.canvas.before:
             Color(1, 1, 1, 1)
@@ -554,10 +522,7 @@ class ChangeLogScreen(Screen):
         # self.rect.pos = self.pos
 
     def on_enter(self, *args):
-        if 'ChangeLogScreen()' in screens_used:
-            pass
-        else:
-            screens_used.append('ChangeLogScreen()')
+        check_in_names(screen_name='change_log')
 
 
 class HomeScreen(Screen):
@@ -567,7 +532,7 @@ class HomeScreen(Screen):
 
     def __init__(self, **kwargs):
         super(HomeScreen, self).__init__(**kwargs)
-        self.name = 'landing'
+        self.name = 'home'
 
         with self.canvas.before:
             Color(1, 1, 1, 1)
@@ -604,29 +569,29 @@ class HomeScreen(Screen):
         btn1.bind(width=lambda *x: btn4.setter("text_size")(btn4, (btn4.width, None)),
                   texture_size=lambda *x: btn4.setter("height")(btn4, btn4.texture_size[1]))
 
-        # version = Label(text='v1.2.9', font_size='10sp', color=(0, .6, .8, 1), size_hint=[.25, .05],
-        # pos_hint={'x': .75, 'y': 0}, halign='right', valign='middle')
-        # version.bind(width=lambda *x: version.setter("text_size")(version, (version.width, None)),
-        # texture_size=lambda *x: version.setter("height")(version, version.texture_size[1]))
-
         for w in [btn1, btn2, btn3, btn4]:
             self.add_widget(w)
 
     def update_rect(self, *args):
         self.rect.size = Window.size
-        # self.rect.pos = self.pos
 
     def on_enter(self, *args):
-        if 'HomeScreen()' in screens_used:
-            pass
-        else:
-            screens_used.append('HomeScreen()')
+        check_in_names(screen_name='home')
+
+
+def check_in_names(screen_name):
+    if screen_name in screens_used:
+        pass
+    else:
+        screens_used.append(screen_name)
 
 
 def callback_to_sc1a(*args):
     conn = resolve_connectivity()
     if conn is True:
-        sm.switch_to(Teams())
+        global my_teams
+        my_teams = Teams()
+        sm.switch_to(my_teams)
     else:
         ConnWarnPopup(message=conn).open()
 
@@ -634,51 +599,55 @@ def callback_to_sc1a(*args):
 def callback_to_sc1b(*args):
     conn = resolve_connectivity()
     if conn is True:
-        Standings.current_teams_standings = get_standings()[0]
-        Standings.info = get_standings()[1]
-        sm.switch_to(Standings())
+        current_teams_standings = get_standings()[0]
+        inf = get_standings()[1]
+        my_standings = Standings(all_current_teams_standings=current_teams_standings, info=inf)
+        sm.switch_to(my_standings)
     else:
         ConnWarnPopup(message=conn).open()
 
 
 def callback_to_sc1c(*args):
-    sm.switch_to(ChangeLogScreen())
+    change_log = ChangeLogScreen()
+    sm.switch_to(change_log)
 
 
 def callback_to_sc1d(*args):
     del screens_used[-1]
-    sm.switch_to(HomeScreen())
+    sm.switch_to(my_home)
 
 
-def callback_to_sc2():
-    sm.switch_to(Roster())
+def callback_to_sc2(image_name):
+    global my_roster
+    my_roster = Roster(team_roster=roster_n, teams_name=image_name)
+    sm.switch_to(my_roster)
 
 
-def callback_to_sc3(instance):
+def callback_to_sc3(instance, *args):
     conn = resolve_connectivity()
     if conn is True:
-        b = access_bio(Roster.roster_n, instance.text)
 
-        Options.t = b[2]
-        Options.player_name = b[0]
-        Options.num = b[1][3]
-        Options.position = b[1][4]
-        Options.height_ = b[1][0]
-        Options.date = b[1][1]
-        Options.nationality = b[1][2]
+        roster = roster_n
+        b = access_bio(roster, instance.text)
+
+        global tree, athletes_name
+        tree = b[2]
+        athletes_name = b[0]
 
         # D/L player's photo.
         photo_link = b[1][5]
         if photo_link != 'NoImage.jpg':
             response = requests.get(photo_link)
-            filename = b[0] + ".jpg"
-            with open(filename, "wb") as f:
+            file_name = b[0] + ".jpg"
+            with open(file_name, "wb") as f:
                 f.write(response.content)
         else:
-            filename = 'NoImage.jpg'
-        Options.filename = filename
+            file_name = 'NoImage.jpg'
 
-        sm.switch_to(Options())
+        global my_options
+        my_options = Options(_tree=b[2], player_name=b[0], num=b[1][3], position=b[1][4], height=b[1][0], date=b[1][1],
+                             nationality=b[1][2], filename=file_name)
+        sm.switch_to(my_options)
 
     else:
         ConnWarnPopup(message=conn).open()
@@ -689,14 +658,13 @@ def callback_to_sc4(instance):
     The following two lines perform a pre-check on the availability of statistics for the selected player. If no data
     are available, the code will not proceed to the next screen but will open the 'No data' popup, instead.
     """
-    av_stats_list = get_aver_stats(Options.t)  # Or: get_total_stats(Options.t)
+    av_stats_list = get_aver_stats(tree)
     v = stability_check(av_stats_list)
     if v is None:
         pass
     else:
-        RVMod.tree = Options.t
-        RVMod.name = GameStats.player_name = Options.player_name
-        sm.switch_to(GameStats())
+        g_s = GameStats(_tree=tree, his_name=athletes_name)
+        sm.switch_to(g_s)
 
 
 class MyScreenManager(ScreenManager):
@@ -712,24 +680,24 @@ class MyScreenManager(ScreenManager):
 
     def android_back_click(self, window, key, *largs):
         if key in [27, 1001]:
-            if screens_used[-1] not in ['HomeScreen()', 'ChangeLogScreen()']:
-                del screens_used[-1]
-                self.back = True
-                return True
+            x = screens_used[-1]
+            screens_menu = (
+            ('teams', my_home), ('roster', my_teams), ('options', my_roster), ('game_stats', my_options),
+            ('standings', my_home))
+            if x not in ['home', 'change_log']:
+                for n, cl in screens_menu:
+                    if x == n:
+                        sm.switch_to(cl)
+                        del screens_used[-1]
+                        return True
             else:
-                if screens_used[-1] in ['ChangeLogScreen()']:
-                    ''' "ChangeLogScreen()" entry in :list: screens_used is deleted, when the user presses
-                    the OK button in ChangeLogScreen (see, :meth: callback_to_sc1d).'''
+                if screens_used[-1] in ['change_log']:
                     return True
                 else:
                     ExitPopup().open()
-                    Clock.schedule_once(self.exit_app, 2)
+                    Clock.schedule_once(self.exit_app, 1.5)
                     return True
         return False
-
-    def on_back(self, instance, back, *args):
-        self.switch_to(eval(screens_used[-1]))
-        self.back = False
 
     @staticmethod
     def exit_app(*args):
@@ -737,20 +705,29 @@ class MyScreenManager(ScreenManager):
         App.get_running_app().stop()
 
 
+tree = None
+athletes_name = None
+my_home = None
+my_teams = None
+my_options = None
+my_roster = None
+
 sm = MyScreenManager()
 screens_used = []
 
 
 class EuroLeagueStatsApp(App):
     def build(self):
-        sm.add_widget(HomeScreen())
+        global my_home
+        my_home = HomeScreen()
+        sm.add_widget(my_home)
         return sm
 
     def on_stop(self):
-        for filename in os.listdir(os.getcwd()):
-            if filename.endswith('.jpg') and filename not in ['Court.jpg', 'NoImage.jpg']:
+        for file_name in os.listdir(os.getcwd()):
+            if file_name.endswith('.jpg') and file_name not in ['Court.jpg', 'NoImage.jpg']:
                 try:
-                    os.remove(filename)
+                    os.remove(file_name)
                 except OSError:
                     pass
 
