@@ -5,8 +5,7 @@ from library import get_opponents_dict_on_press
 
 
 def stability_check(list_of_stats):
-    # PURPOSE: Pre-check to find if statistical data are available. Called by :meth: access_average_stats,
-    #  access_total_stats and callback_to_sc4 in Class 'Options' - main.py.
+    # PURPOSE: Pre-check to find if statistical data are available.
     if list_of_stats is None:
         warning_popup = Popup(title="Message", title_color=[0, 0, 0, 1], title_size="17sp",
                               separator_color=[1, .4, 0, 1], title_font="Roboto-Regular",
@@ -23,7 +22,6 @@ def stability_check(list_of_stats):
 
 
 def access_bio(roster_n, player_name):
-    # PURPOSE: Called by :cls: 'Options' - main.py
     v = get_opponents_dict_on_press(roster_n, player_name)
     player_info = v[0].xpath("//div[@class='summary-second']/span/text()")
     player_pos = v[0].xpath("//div[@class='summary-first']/span/span/text()")
