@@ -64,8 +64,8 @@ def is_connected(hostname):
         '''2 = SHUT_RDWR'''
         s.shutdown(2)
         s.close()
-
         return True
+
     except OSError:
         pass
     return False
