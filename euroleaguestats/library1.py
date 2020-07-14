@@ -13,7 +13,6 @@ def resolve_connectivity():
 
         if available_site:
             return True
-
         else:
             message = 'euroleague.net could not be reached. Please, check your network connection.'
             return message
@@ -67,8 +66,6 @@ def is_connected(hostname):
         s.close()
 
         return True
-
     except OSError:
         pass
-
     return False
