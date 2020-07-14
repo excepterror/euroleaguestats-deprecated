@@ -42,7 +42,7 @@ def check_network_availability():
     '''Check if the Network object is not null and verify the type of available network.'''
     if capabilities is not None and (
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) or capabilities.hasTransport(
-        NetworkCapabilities.TRANSPORT_CELLULAR)):
+            NetworkCapabilities.TRANSPORT_CELLULAR)):
         return True
     return False
 
