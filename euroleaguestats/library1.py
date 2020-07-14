@@ -44,9 +44,7 @@ def check_network_availability():
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) or capabilities.hasTransport(
         NetworkCapabilities.TRANSPORT_CELLULAR)):
         return True
-
-    else:
-        return False
+    return False
 
 
 def is_connected(hostname):
