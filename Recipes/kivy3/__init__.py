@@ -3,12 +3,10 @@ import shutil
 
 
 class Kivy3Recipe(PythonRecipe):
-
     version = 'master'
     url = 'https://github.com/KeyWeeUsr/kivy3/archive/{version}.zip'
 
     depends = ['kivy']
-
     site_packages_name = 'kivy3'
 
     '''Due to setuptools.'''
@@ -16,7 +14,8 @@ class Kivy3Recipe(PythonRecipe):
 
     def build_arch(self, arch):
         super().build_arch(arch)
+        suffix = '/kivy3/default.glsl'
+        shutil.copyfile(self.get_build_dir(arch.arch) + suffix, self.ctx.get_python_install_dir() + suffix)
 
-        shutil.copyfile(self.get_build_dir(arch.arch) + '/kivy3/default.glsl', self.get_build_dir(arch.arch).split('/other_builds')[0] + '/python-installs/euroleaguestats/kivy3/default.glsl')
 
 recipe = Kivy3Recipe()
