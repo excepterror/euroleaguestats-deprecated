@@ -20,14 +20,14 @@ from kivy.clock import Clock
 from kivy.metrics import Metrics, dp
 from kivy.uix.textinput import TextInput
 
-from popups import ConnWarnPopup, ExitPopup
-from any_colour_widgets import AnyColorLabel, AnyColorButton
-from tooltips import ToolTipTextUp, ToolTipTextDown
-from display_widgets import OptionsButtonLabel, DisplayLabel, DisplayButton
-from rv import RV
-from rv_mod import RVMod
-from rv_standings import RVSt
-from cube3d import Cube3D
+from Widgets.popups import ConnWarnPopup, ExitPopup
+from Widgets.any_colour_widgets import AnyColorLabel, AnyColorButton
+from Widgets.tooltips import ToolTipTextUp, ToolTipTextDown
+from Widgets.display_widgets import OptionsButtonLabel, DisplayLabel, DisplayButton
+from Widgets.rv import RV
+from Widgets.rv_mod import RVMod
+from Widgets.rv_standings import RVSt
+from Widgets.cube3d import Cube3D
 
 from connectivity import resolve_connectivity
 from participants import teams_codes, fetch_players, fetch_teams, url_for_players
@@ -672,7 +672,8 @@ class Menu(Screen):
 
         with self.canvas.before:
             Color(1, .2, 0, .9)
-            self.bottom_rect = Rectangle(size=(scr_w, scr_h / 12), pos=(0, scr_h - scr_h / 36))
+            self.top_rect = Rectangle(size=(scr_w, scr_h), pos=(0, scr_h - scr_h / 36))
+        self.bind(size=self.update_rect)
 
         with self.canvas.before:
             Color(1, 1, 1, .8)

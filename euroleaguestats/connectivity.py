@@ -1,11 +1,11 @@
 import socket
 
-from jnius import autoclass
+# from jnius import autoclass
 
 
 def resolve_connectivity():
 
-    available_net = check_network_availability()
+    available_net = True #check_network_availability()
 
     if available_net:
         available_site = is_connected('www.euroleague.net')
