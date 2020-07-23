@@ -14,7 +14,7 @@ from kivy.metrics import dp
 
 from participants import check_opponents
 from stats import per_game_statistics, per_game_stats, fetch_opponents
-from rv import RV
+from Widgets.rv import RV
 
 
 def access_per_game_stats(tree, name):
