@@ -1,4 +1,4 @@
-"""The __main__ module controls application's UI."""
+"""The __main__ module controls the application's UI."""
 
 import os
 import kivy
@@ -20,7 +20,7 @@ from kivy.clock import Clock
 from kivy.metrics import Metrics, dp
 from kivy.uix.textinput import TextInput
 
-from Widgets.popups import ConnWarnPopup, ExitPopup
+from Widgets.popups import ConnWarnPopup, MessagePopup
 from Widgets.any_colour_widgets import AnyColorLabel, AnyColorButton
 from Widgets.tooltips import ToolTipTextUp, ToolTipTextDown
 from Widgets.display_widgets import OptionsButtonLabel, DisplayLabel, DisplayButton
@@ -36,6 +36,11 @@ from stats import dict_creator, fetch_aver_stats, fetch_total_stats
 from standings import fetch_standings
 from supplement import pos_init_dict, factor1, bind_instance
 
+CURRENT_SEASON = ''
+
+scr_w = Window.system_size[0]
+scr_h = Window.system_size[1]
+
 tree = None
 athletes_name = None
 my_home = None
@@ -49,9 +54,6 @@ past_roster = None
 past_options = None
 roster = {}
 
-scr_w = Window.system_size[0]
-scr_h = Window.system_size[1]
-
 
 class PastSeasons(Screen):
 
@@ -63,7 +65,7 @@ class PastSeasons(Screen):
             self.rect = Rectangle(size=self.size)
         self.bind(size=self.update_rect)
 
-        self.text_input = TextInput(multiline=True, allow_copy=True,
+        self.text_input = TextInput(multiline=False, allow_copy=True,
                                     size_hint=[None, None],
                                     pos_hint={'center_x': .5, 'center_y': .5},
                                     hint_text='Any year from 2000 to 2019',
@@ -134,7 +136,8 @@ class GameStats(Screen):
             self.rect = Rectangle(size=self.size)
         self.bind(size=self.update_rect)
 
-        label = DisplayLabel(text='Games played by ' + str(his_name), font_size='17sp', r=0, g=.2, b=.4, a=1)
+        label = DisplayLabel(text='Games played by ' + '[color=FF6600]' + str(his_name) + '[/color]',
+                             font_size='17sp', r=0, g=0, b=0, a=1)
         recycle_viewer = RVMod(_tree, his_name)
 
         for w in [label, recycle_viewer]:
@@ -280,7 +283,7 @@ class Roster(Screen):
     Roster Screen Setup
     """
 
-    def __init__(self, _roster_, name):
+    def __init__(self, _roster_, teams_name):
         super().__init__()
 
         self.size_hint = [1, 1]
@@ -288,7 +291,7 @@ class Roster(Screen):
 
         self.roster = _roster_
 
-        self.title = DisplayLabel(text='', font_size='17sp', r=0, g=.6, b=.6, a=1)
+        self.title = DisplayLabel(text=str(teams_name), font_size='17sp', r=0, g=.6, b=.6, a=1)
         self.add_widget(self.title)
 
         with self.canvas.before:
@@ -296,53 +299,63 @@ class Roster(Screen):
             self.rect = Rectangle(size=self.size)
         self.bind(size=self.update_rect)
 
-        '''Layouts.'''
-        scrollable_roster = ScrollView(do_scroll_x=False, bar_color=[.2, .6, .8, 1],
-                                       bar_pos_y="right", bar_width=dp(2), bar_margin=dp(2),
-                                       scroll_type=["bars", "content"],
-                                       size_hint=[.95, .84],
-                                       pos_hint={'center_x': .5, 'y': .03})
+        if self.roster == {}:
 
-        '''self.text and self.roster_n: from :meth: on_touch_up in :class: Draggable Logo'''
-        grid = GridLayout(rows=len(self.roster), cols=1,
-                          padding=10,
-                          size_hint=[1, 2.45],
-                          spacing=6)
+            message = Label(text='To be announced..... Almost there now!', font_size='25sp',
+                            color=(0, 0, 0, 1),
+                            size_hint=[1, .2],
+                            pos_hint={'center_x': .5, 'center_y': .55},
+                            halign='center',
+                            valign='middle')
 
-        scrollable_roster.add_widget(grid)
+            message.bind(width=lambda *x: message.setter('text_size')(message, (message.width, None)),
+                         texture_size=lambda *x: message.setter('height')(message, message.texture_size[1]))
 
-        self.add_widget(scrollable_roster)
+            self.add_widget(message)
 
-        for _name, url in self.roster.items():
-            self.btn = DisplayButton(text=str(_name))
-            self.btn.bind(on_release=self.call_options)
-            grid.add_widget(self.btn)
+        else:
+
+            '''Layouts.'''
+            scrollable_roster = ScrollView(do_scroll_x=False, bar_color=[.2, .6, .8, 1],
+                                           bar_pos_y="right", bar_width=dp(2), bar_margin=dp(2),
+                                           scroll_type=["bars", "content"],
+                                           size_hint=[.95, .84],
+                                           pos_hint={'center_x': .5, 'y': .03})
+
+            '''self.text and self.roster_n: from :meth: on_touch_up in :class: Draggable Logo'''
+            grid = GridLayout(rows=len(self.roster), cols=1,
+                              padding=10,
+                              size_hint=[1, 2.45],
+                              spacing=6)
+
+            scrollable_roster.add_widget(grid)
+            self.add_widget(scrollable_roster)
+
+            for _name, url in self.roster.items():
+                self.btn = DisplayButton(text=str(_name))
+                self.btn.bind(on_release=self.call_options)
+                grid.add_widget(self.btn)
 
     def update_rect(self, *args):
         self.rect.size = Window.size
 
-    def call_options(self, instance, *args):
+    def call_options(self, instance):
         conn = resolve_connectivity()
 
         if conn is True:
-
             b = access_bio(self.roster, instance.text)
 
             global tree, athletes_name
-
             tree = b[2]
             athletes_name = b[0]
 
             global my_options
-
             my_options = Options(_tree=b[2], player_name=b[0], num=b[1][3], position=b[1][4], height=b[1][0],
                                  date=b[1][1], nationality=b[1][2], filename=b[1][5])
-
             sm.transition = SlideTransition(direction='left')
             sm.switch_to(my_options)
 
         else:
-
             ConnWarnPopup(message=conn).open()
 
     @staticmethod
@@ -372,6 +385,7 @@ class PastRoster(Roster):
 
             sm.transition = FadeTransition(duration=.5)
             sm.switch_to(past_options)
+
         else:
             ConnWarnPopup(message=conn).open()
 
@@ -422,6 +436,8 @@ class DraggableLogo(DragBehavior, Widget):
 
     def __init__(self, emblem, **kwargs):
         super().__init__(**kwargs)
+
+        self.message_popup = MessagePopup(on_open=self.fetch_roster)
 
         self.logo = Image(source=emblem, allow_stretch=True, keep_ratio=False, size_hint=[None, None],
                           width=dp(50), height=dp(50), pos=self.pos)
@@ -496,7 +512,6 @@ class DraggableLogo(DragBehavior, Widget):
 
         self.logo.opacity = 1
         self.im.opacity = 0
-
         Animation.stop_all(self)
 
         if self.collide_point(*touch.pos):
@@ -512,27 +527,31 @@ class DraggableLogo(DragBehavior, Widget):
 
         if scr_w / 2. > self.x > scr_w / 2. - dp(35) and scr_h / 2. - dp(35) < self.y < scr_h / 2.:
 
-            '''Checking first if the position of the widget (image) is within the bounding circle, then...'''
-            image_name = self.logo.source.partition('Images/')[-1].split('.')[0]
-            codes = teams_codes()[1]
-
-            for team, data in codes.items():
-                if team == image_name:
-                    '''data[0] is a number from 1 - 18'''
-                    url = url_for_players(data[1], 'E2019')
-                    global roster
-                    roster = fetch_players(url)
-
-            self.call_roster(image_name)
+            self.message_popup.message.text = 'Getting there...'
+            self.message_popup.open()
 
         return super().on_touch_up(touch)
 
-    @staticmethod
-    def call_roster(image_name):
+    def fetch_roster(self, *args):
+
+        """Checking first if the position of the widget (image) is within the bounding circle, then..."""
+        image_name = self.logo.source.partition('Images/')[-1].split('.')[0]
+        codes = teams_codes()[1]
+
+        for team, data in codes.items():
+            if team == image_name:
+                '''data[0] is a number from 1 - 18'''
+                url = url_for_players(data[1], CURRENT_SEASON)
+                global roster
+                roster = fetch_players(url)
+                self.call_roster(image_name)
+
+    def call_roster(self, image_name):
         global my_roster
-        my_roster = Roster(_roster_=roster, name=image_name)
+        my_roster = Roster(_roster_=roster, teams_name=image_name)
         my_roster.title.text = image_name + ' Roster'
 
+        self.message_popup.dismiss()
         sm.transition = SlideTransition(direction='left')
         sm.switch_to(my_roster)
 
@@ -575,14 +594,18 @@ class Standings(Screen):
     def __init__(self, all_current_teams_standings, info):
         super().__init__()
 
+        _info_ = info[1].split(' ')
+
         with self.canvas.before:
             Color(1, 1, 1, .9)
             self.rect = Rectangle(size=self.size, pos=self.pos)
         self.bind(size=self.update_rect)
 
         round_info = DisplayLabel(font_size='17sp',
-                                  text='[b]' + info[0] + '\n' + '[color=FFFFFF]' + info[
-                                        1] + '[/color]' + '[/b]', r=0, g=.2, b=.4, a=1)
+                                  text='[b][color=FFFFFF]' + info[0] + '[/color]' + '\n'
+                                       + '[color=FFFFFF]' + _info_[1] + '[/color]'
+                                       + '[i][color=FF6600]' + ' ' + _info_[2] + '[/color][/i]' + '[/b]',
+                                  r=0, g=0, b=0, a=1)
         self.add_widget(round_info)
 
         rv_view = RVSt(all_current_teams_standings)
@@ -602,12 +625,14 @@ class ChangeLogScreen(Screen):
     """
 
     log_text_1 = StringProperty(
-        '\n[b]' + 'ELS `Monolith` v1.4.0 64-bit - Current Release' + '[/b]'
+        '\n[u]' + 'ELS `Monolith` v1.4.1' + '[/u]'
+        + '\n\n> Update for Season 2020 - 21'
+        + '\n\n\n [u]' + 'ELS `Monolith` v1.4.0' + '[/u]'
         + '\n\n> App engine upgrade'
         + '\n\n> Code improvements'
         + '\n\n> New Graphics'
         + '\n\n> New! Past Seasons Statistics (2000 - 2019)'
-        + '\n\n> Android 10 compatible')
+        + '\n\n> Optimised for Android 10')
 
     def __init__(self):
         super().__init__()
@@ -680,7 +705,7 @@ class Menu(Screen):
             Line(points=(scr_w / 12, scr_h / 12, scr_w / 3.5, scr_h / 12))
             Line(points=(2.5 * scr_w / 3.5, scr_h / 12, 11 * scr_w / 12, scr_h / 12))
 
-        els = Label(text='EuroLeagueStats 2019 - 2020',
+        els = Label(text='EuroLeagueStats 2020 - 2021',
                     font_size='13sp',
                     size_hint=[.3, None],
                     pos_hint={'center_x': .5, 'center_y': .085},
@@ -774,7 +799,7 @@ class HomeScreen(Screen):
                               pos_hint={'center_x': .5, 'center_y': .3})
         btn1.bind(on_press=self.call_menu)
 
-        ''' ------> btn2 and btn3 form one widget!'''
+        '''btn2 and btn3 form one widget!'''
         btn2 = AnyColorButton(text=' ', r=1, g=.2, b=0, a=.9, font_size='21sp',
                               size_hint=[.6, .087],
                               pos_hint={'center_x': .5, 'center_y': .15})
@@ -823,6 +848,8 @@ class MyScreenManager(ScreenManager):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.exit_popup = MessagePopup()
+
         '''Device's back button functionality.'''
         Window.bind(on_keyboard=self.android_back_click)
 
@@ -853,8 +880,10 @@ class MyScreenManager(ScreenManager):
 
                 else:
 
-                    ExitPopup().open()
+                    self.exit_popup.message.text = 'See you later!'
+                    self.exit_popup.open()
                     Clock.schedule_once(self.exit_app, 1)
+
                     return True
 
         return False
@@ -865,9 +894,8 @@ class MyScreenManager(ScreenManager):
         else:
             self.screens_visited.append(screen_name)
 
-    @staticmethod
-    def exit_app(*args):
-        ExitPopup().dismiss()
+    def exit_app(self, *args):
+        self.exit_popup.dismiss()
         App.get_running_app().stop()
 
 
@@ -883,7 +911,7 @@ class EuroLeagueStatsApp(App):
 
     def on_stop(self):
 
-        """Cleaning up any residual not essential jpeg files."""
+        """Cleaning up any residual non essential jpeg files."""
 
         for file_name in os.listdir(os.getcwd()):
             if file_name.endswith('.jpg') and file_name not in ('Court.jpg', 'NoImage.jpg'):

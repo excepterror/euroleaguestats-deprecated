@@ -10,12 +10,12 @@ def teams_codes():
 
     codes = {'Alba Berlin': [1, 'BER'], 'Anadolu Efes Istanbul': [2, 'IST'],
              'AX Armani Exchange Olimpia Milan': [3, 'MIL'], 'Crvena Zvezda MTS Belgrade': [4, 'RED'],
-             'CSKA Moscow': [5, 'CSK'],
-             'FC Barcelona Lassa': [6, 'BAR'], 'FC Bayern Munich': [7, 'MUN'], 'Fenerbahce Beko Istanbul': [8, 'ULK'],
-             'Khimki Moscow Region': [9, 'KHI'], 'KIROLBET Baskonia Vitoria Gasteiz': [10, 'BAS'],
-             'LDLC ASVEL Villeurbanne': [11, 'ASV'], 'Maccabi FOX Tel Aviv': [12, 'TEL'],
-             'Olympiacos Piraeus': [13, 'OLY'], 'Panathinaikos OPAP Athens': [14, 'PAN'], 'Real Madrid': [15, 'MAD'],
-             'Valencia Basket': [16, 'PAM'], 'Zalgiris Kaunas': [17, 'ZAL'], 'Zenit St Petersburg': [18, 'DYR']}
+             'CSKA Moscow': [5, 'CSK'], 'FC Barcelona Lassa': [6, 'BAR'], 'FC Bayern Munich': [7, 'MUN'],
+             'Fenerbahce Beko Istanbul': [8, 'ULK'], 'Khimki Moscow Region': [9, 'KHI'],
+             'KIROLBET Baskonia Vitoria Gasteiz': [10, 'BAS'], 'LDLC ASVEL Villeurbanne': [11, 'ASV'],
+             'Maccabi FOX Tel Aviv': [12, 'TEL'], 'Olympiacos Piraeus': [13, 'OLY'],
+             'Panathinaikos OPAP Athens': [14, 'PAN'], 'Real Madrid': [15, 'MAD'], 'Valencia Basket': [16, 'PAM'],
+             'Zalgiris Kaunas': [17, 'ZAL'], 'Zenit St Petersburg': [18, 'DYR']}
 
     teams_codes_n = OrderedDict(sorted(codes.items(), key=lambda t: t[1]))
     teams = [k for k, v in teams_codes_n.items()]
@@ -23,8 +23,7 @@ def teams_codes():
 
 
 def url_for_players(team_code, season_code):
-    base_url = 'https://www.euroleague.net/competition/teams/showteam?clubcode='
-    url = base_url + team_code + '&seasoncode=' + season_code
+    url = f'https://www.euroleague.net/competition/teams/showteam?clubcode={team_code}&seasoncode={season_code}'
     return url
 
 
@@ -93,14 +92,15 @@ def check_opponents(t):
     """PURPOSE: Creates 3 dicts with all teams the player played against in Regular Season, Play-Offs & Finals.
     Called by :meth: 'access_per_game_stats' - standings.py."""
 
+    season = 'E2019'
     rivals_rs = t.xpath(
-        '//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_RS"]//'
+        f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{season}_RS"]//'
         'table[@id="tblPlayerPhaseStatistics"]/tr/td[@class="RivalContainer"]/a/text()')
     rivals_po = t.xpath(
-        '//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_PO"]//'
+        f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{season}_PO"]//'
         'table[@id="tblPlayerPhaseStatistics"]/tr/td[@class="RivalContainer"]/a/text()')
     rivals_ff = t.xpath(
-        '//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_FF"]//'
+        f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{season}_FF"]//'
         'table[@id="tblPlayerPhaseStatistics"]/tr/td[@class="RivalContainer"]/a/text()')
 
     return [rivals_rs, rivals_po, rivals_ff]

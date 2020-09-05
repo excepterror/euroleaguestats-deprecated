@@ -33,9 +33,8 @@ class ConnWarnPopup(Popup):
             layout.add_widget(w)
 
 
-class ExitPopup(Popup):
-
-    """PURPOSE: Exit options Popup. Called by :cls: 'MyScreenManager' - main.py.
+class MessagePopup(Popup):
+    """PURPOSE: Notifications Popup. Called by :cls: 'MyScreenManager' - main.py.
     """
 
     def __init__(self, **kwargs):
@@ -53,15 +52,16 @@ class ExitPopup(Popup):
         self.separator_color = (.2, .6, .8, 1)
         self.auto_dismiss = False
 
-        message = Label(text='See you later!', font_size='17sp',
-                        color=(1, .4, 0, 1),
-                        size_hint=[1, .2],
-                        pos_hint={'center_x': .5, 'center_y': .55},
-                        halign='center',
-                        valign='middle')
+        self.message = Label(text='', font_size='17sp',
+                             color=(1, .4, 0, 1),
+                             size_hint=[1, .2],
+                             pos_hint={'center_x': .5, 'center_y': .55},
+                             halign='center',
+                             valign='middle')
 
-        message.bind(width=lambda *x: message.setter('text_size')(message, (message.width, None)),
-                     texture_size=lambda *x: message.setter('height')(message, message.texture_size[1]))
+        self.message.bind(width=lambda *x: self.message.setter('text_size')(self.message, (self.message.width, None)),
+                          texture_size=lambda *x: self.message.setter('height')(self.message,
+                                                                                self.message.texture_size[1]))
 
-        for w in [message]:
+        for w in [self.message]:
             layout.add_widget(w)

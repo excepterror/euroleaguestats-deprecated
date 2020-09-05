@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+CURRENT_SEASON = 'E2020'
+
 dict_template = {'Minutes:': [1], 'Points:': [2], '2-Point Field Goals:': [3], '3-Point Field Goals:': [4],
                  'Free Throws:': [5], 'Offensive Rebounds:': [6], 'Defensive Rebounds:': [7],
                  'Total Rebounds:': [8], 'Assists:': [9], 'Steals:': [10], 'Turnovers:': [11],
@@ -17,8 +19,7 @@ def fetch_total_stats(tree):
 
     if not total_stats:
         return None
-    else:
-        return total_stats
+    return total_stats
 
 
 def fetch_aver_stats(tree):
@@ -31,8 +32,7 @@ def fetch_aver_stats(tree):
 
     if not average_stats:
         return None
-    else:
-        return average_stats
+    return average_stats
 
 
 def fetch_opponents(tree, rivals_rs, rivals_po, rivals_ff):
@@ -44,13 +44,13 @@ def fetch_opponents(tree, rivals_rs, rivals_po, rivals_ff):
     opponents_dict_rs = {}
     opponents_dict_po = {}
     opponents_dict_ff = {}
-    round_num_rs = tree.xpath('//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_RS"]//'
+    round_num_rs = tree.xpath(f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{CURRENT_SEASON}_RS"]//'
                               'table[@id="tblPlayerPhaseStatistics"]/tr/td[@class="PlayerGameNumberContainer"]'
                               '/text()')
-    round_num_po = tree.xpath('//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_PO"]//'
+    round_num_po = tree.xpath(f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{CURRENT_SEASON}_PO"]//'
                               'table[@id="tblPlayerPhaseStatistics"]/tr/td[@class="PlayerGameNumberContainer"]'
                               '/text()')
-    round_num_ff = tree.xpath('//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_FF"]//'
+    round_num_ff = tree.xpath(f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{CURRENT_SEASON}_FF"]//'
                               'table[@id="tblPlayerPhaseStatistics"]/tr/td[@class="PlayerGameNumberContainer"]'
                               '/text()')
     round_num_rs_n = []
@@ -91,8 +91,9 @@ def per_game_stats(tree):
     """PURPOSE: Fetching game stats. Stats for each round played in RS.
     """
 
+    season = 'E2019'
     games_stats_rs = tree.xpath(
-        '//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_RS"]//'
+        f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{CURRENT_SEASON}_RS"]//'
         'table[@id="tblPlayerPhaseStatistics"]/tr/td/text()')
     games_played_rs = len(games_stats_rs) / 17
 
@@ -101,7 +102,7 @@ def per_game_stats(tree):
 
     '''Stats for each round played in POs.'''
     games_stats_po = tree.xpath(
-        '//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_PO"]//'
+        f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{CURRENT_SEASON}_PO"]//'
         'table[@id="tblPlayerPhaseStatistics"]/tr/td/text()')
     games_played_po = len(games_stats_po) / 17
 
@@ -110,7 +111,7 @@ def per_game_stats(tree):
 
     '''Stats for each round played in FF.'''
     games_stats_ff = tree.xpath(
-        '//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="E2019_FF"]//'
+        f'//div[@class="PlayerPhasesStatisticsMainContainer"]//div[@id="{CURRENT_SEASON}_FF"]//'
         'table[@id="tblPlayerPhaseStatistics"]/tr/td/text()')
     games_played_ff = len(games_stats_ff) / 17
 
