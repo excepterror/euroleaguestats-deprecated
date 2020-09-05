@@ -34,7 +34,7 @@ class ConnWarnPopup(Popup):
 
 
 class MessagePopup(Popup):
-    """PURPOSE: Exit options Popup. Called by :cls: 'MyScreenManager' - main.py.
+    """PURPOSE: Notifications Popup. Called by :cls: 'MyScreenManager' - main.py.
     """
 
     def __init__(self, **kwargs):
