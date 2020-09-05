@@ -44,7 +44,7 @@ Builder.load_string('''
     # Draw a background to indicate selection.
     canvas.before:
         Color:
-            rgba: (1, 0.4, 0, .8) if self.selected else (0, 0, 0, .8)
+            rgba: (0, 0, 0, .5) if self.selected else (0, 0, 0, .75)
         RoundedRectangle:
             segments: 40
             radius: 7,0
@@ -88,7 +88,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
         self.halign = 'center'
         self.valign = 'middle'
         self.font_size = '16sp'
-        self.color = (.2, .6, .8, 1)
+        self.color = (1, .4, 0, 1)
         self.bind(width=lambda *x: self.setter('text_size')(self, (self.width, None)))
 
     def refresh_view_attrs(self, rv, index, data):
@@ -157,7 +157,6 @@ class RVMod(RecycleView):
         self.data_po = [{'text': str(opp)} for opp, num in a[1].items()]
         self.data_ff = [{'text': str(opp)} for opp, num in a[2].items()]
         self.data = self.data_rs + self.data_po + self.data_ff
-        # self.opp = opponents_dict
         self.games_stats_rs = a[3]
         self.games_stats_po = a[4]
         self.games_stats_ff = a[5]
