@@ -63,7 +63,7 @@ class Cube3D(FloatLayout):
         label1.bind(width=lambda *x: label1.setter("text_size")(label1, (label1.width, None)),
                     texture_size=lambda *x: label1.setter("height")(label1, label1.texture_size[1]))
 
-        label2 = Label(text='2019 - 20', font_size='14sp', color=(.4, .4, .4, .8), size_hint=(1, None),
+        label2 = Label(text='2020 - 21', font_size='14sp', color=(.4, .4, .4, .8), size_hint=(1, None),
                        pos_hint={'center_x': .5, 'center_y': .62}, halign='center', valign='middle')
         label2.bind(width=lambda *x: label2.setter("text_size")(label2, (label2.width, None)),
                     texture_size=lambda *x: label2.setter("height")(label2, label2.texture_size[1]))
